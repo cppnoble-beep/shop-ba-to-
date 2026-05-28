@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "name": "Arabica Premium Beans",
+    "category": "Beans",
+    "price": 650,
+    "stock": 120,
+    "description": "Freshly roasted Arabica coffee beans.",
+    "image": "assets/images/coffee-products/arabica.jpg"
+  },
+
+  {
+    "id": 2,
+    "name": "Vanilla Latte",
+    "category": "Latte",
+    "price": 220,
+    "stock": 90,
+    "description": "Creamy vanilla latte drink.",
+    "image": "assets/images/coffee-products/latte.jpg"
+  }
+]

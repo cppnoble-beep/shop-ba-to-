@@ -1,0 +1,9 @@
+[
+  {
+    "id": "ORD-1001",
+    "customer": "Juan Dela Cruz",
+    "item": "Arabica Premium Beans",
+    "status": "Completed",
+    "price": 650
+  }
+]

@@ -1,0 +1,18 @@
+body {
+  background: #f5f1eb;
+  font-family: Inter, sans-serif;
+}
+
+.coffee-gradient {
+  background: linear-gradient(135deg,#2b1709,#6f4e37,#d4a373);
+}
+
+.glass {
+  background: rgba(255,255,255,0.7);
+  backdrop-filter: blur(10px);
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  transition: 0.3s ease;
+}
