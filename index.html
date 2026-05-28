@@ -33,6 +33,44 @@
       transform: translateY(-5px);
       transition: all 0.3s ease;
     }
+      #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 1.5rem;
+      z-index: 9999;
+  
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+  
+      background: rgba(20, 20, 20, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  
+      color: #fff;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease;
+    }
+  
+    #back-to-top.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+  
+    #back-to-top:hover  { background: rgba(20, 20, 20, 0.85); }
+    #back-to-top:active { transform: translateY(2px); 
+    }
   </style>
 </head>
 <body x-data="coffeeApp()" class="min-h-screen text-gray-800">
@@ -556,6 +594,10 @@ function adminApp() {
       </div>
     </div>
   </div>
+    <!-- BUTTON -->
+    <button id="back-to-top" aria-label="Back to top">
+    <i class="fa-solid fa-chevron-up"></i>
+    </button>
 
   <!-- FOOTER -->
   <footer class="coffee-gradient text-white py-12 mt-20">
@@ -600,6 +642,22 @@ function adminApp() {
   </footer>
 
   <script>
+    // Select the back-to-top button by its ID
+    const backToTopButton = document.getElementById('back-to-top');
+    if (backToTopButton) {
+
+    // Shows or hides the back-to-top button based on scroll position;
+    // the button becomes visible after the user scrolls down 300px
+    // passive: true improves scroll performance
+    window.addEventListener('scroll', function () {
+      backToTopButton.classList.toggle('visible', window.scrollY > 300);
+    }, { passive: true });
+
+    // Smoothly scrolls the page back to the top when the button is clicked
+    backToTopButton.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
     function coffeeApp() {
       return {
         search: '',
