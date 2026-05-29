@@ -34,8 +34,7 @@
 
       <div class="nav-links flex gap-8 font-semibold">
         <a href="#products"   class="hover:text-amber-700 transition-colors">Menu</a>
-        <a href="#categories" class="hover:text-amber-700 transition-colors">Categories</a>
-        <a href="admin.html"  class="hover:text-amber-700 transition-colors">Dashboard</a>
+        <a href="#about-us" class="hover:text-amber-700 transition-colors">About Us</a>
       </div>
 
       <button id="open-cart"
@@ -64,10 +63,7 @@
             class="bg-white text-amber-800 px-6 py-3 rounded-2xl font-bold shadow-lg hover:scale-105 transition-transform">
             Shop Now
           </a>
-          <a href="#categories"
-            class="border border-white px-6 py-3 rounded-2xl font-bold hover:bg-white hover:text-amber-900 transition">
-            Browse Menu
-          </a>
+
         </div>
       </div>
 
@@ -101,18 +97,120 @@
 
   <!-- ═══════════════ PRODUCTS ═══════════════ -->
   <section class="max-w-7xl mx-auto px-6 py-12" id="products">
-    <div class="flex items-center justify-between mb-8">
-      <h2 class="text-4xl font-black">Ang Aming Menu</h2>
-      <p class="text-gray-500">Piliin ang iyong kabado</p>
+    <div class="text-center pb-3 mb-10 border-b">
+      <h2 class="text-4xl font-black">Explore the Menu</h2>
+      <p class="text-gray-500 mt-3">Experience our range of emotional support beverages</p>
     </div>
     <div id="product-grid"></div>
+  </section>
+
+
+  <!-- ═══════════════ ABOUT US ═══════════════ -->
+  <section class="max-w-7xl mx-auto px-6 py-20" id="about-us">
+    <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden">
+
+      <!-- Top accent bar -->
+      <div class="coffee-gradient h-2 w-full"></div>
+
+      <!-- Photo Banner -->
+      <div class="relative w-full overflow-hidden" style="height: 420px;">
+        <img
+          src="assets/kapeng-kabado-place.png"
+          alt="Kapeng Kabado Craft Coffee Shop"
+          class="w-full h-full object-cover"
+          style="object-position: center 30%;"
+        />
+        <!-- Overlay with tagline -->
+        <div class="absolute inset-0 flex flex-col items-center justify-end pb-10 px-6 text-center"
+             style="background: linear-gradient(to top, rgba(0,0,0,0.70) 0%, rgba(0,0,0,0.15) 60%, transparent 100%);">
+          <p class="text-amber-300 text-sm font-bold uppercase tracking-widest mb-2">EST. 2024 · Craft Coffee</p>
+          <h3 class="text-white text-4xl font-black drop-shadow-lg">"Coffee First, Panic Later."</h3>
+        </div>
+      </div>
+
+      <div class="p-10 md:p-16 grid md:grid-cols-2 gap-14 items-center">
+
+        <!-- Left: Text content -->
+        <div>
+          <span class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-4 py-2 rounded-full uppercase tracking-widest mb-6">
+            Our Story
+          </span>
+          <h2 class="text-5xl font-black leading-tight text-gray-900 mb-6">
+            Welcome to<br>
+            <span class="text-amber-700">Kapeng Kabado</span>
+          </h2>
+          <p class="text-gray-600 text-lg leading-relaxed mb-5">
+            A coffee shop made for <strong class="text-gray-800">students, overthinkers, crammers, night owls,</strong> and everyone trying to survive one cup at a time.
+          </p>
+          <p class="text-gray-600 leading-relaxed mb-5">
+            Kapeng Kabado started from a simple idea: coffee is not just a drink. For many Filipinos, it becomes part of late-night study sessions, unfinished deadlines, awkward situationships, sudden life realizations, and random 3AM breakdowns. We wanted to create a brand that feels <em>real, funny, comforting, and relatable.</em>
+          </p>
+          <p class="text-gray-600 leading-relaxed mb-5">
+            Our café serves quality coffee with a touch of Filipino humor and Gen Z energy. Every drink is inspired by moments we all know too well — from thesis panic to waiting for a reply that never comes. Behind every cup is the goal to make people smile, relax, and feel less alone in their daily chaos.
+          </p>
+          <p class="text-gray-600 leading-relaxed mb-8">
+            At Kapeng Kabado, we believe coffee tastes better when shared with friends, laughter, and a little bit of drama. Whether you are reviewing for exams, working on your dreams, or simply escaping reality for a while, <strong class="text-gray-800">there is always a place for you here.</strong>
+          </p>
+
+          <!-- Tagline callout -->
+          <div class="coffee-gradient rounded-2xl p-6 text-white">
+            <p class="text-sm font-semibold text-amber-200 mb-1">So take a sip, breathe a little, and remember:</p>
+            <p class="text-2xl font-black italic">"Gising ka na nga, kabado ka pa."</p>
+          </div>
+        </div>
+
+        <!-- Right: Value cards -->
+        <div class="flex flex-col gap-6">
+
+          <div class="flex items-start gap-5 p-6 bg-amber-50 rounded-3xl border border-amber-100">
+            <div class="w-14 h-14 coffee-gradient rounded-2xl flex items-center justify-center shrink-0 text-white text-2xl">
+              ☕
+            </div>
+            <div>
+              <h3 class="font-black text-lg text-gray-900 mb-1">Coffee with Character</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Every drink is inspired by real Filipino moments and Gen Z energy. No boring cups here.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-5 p-6 bg-amber-50 rounded-3xl border border-amber-100">
+            <div class="w-14 h-14 coffee-gradient rounded-2xl flex items-center justify-center shrink-0 text-white text-2xl">
+              🫂
+            </div>
+            <div>
+              <h3 class="font-black text-lg text-gray-900 mb-1">A Place for Everyone</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Overthinkers, crammers, night owls — walang judgment dito. You belong here.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-5 p-6 bg-amber-50 rounded-3xl border border-amber-100">
+            <div class="w-14 h-14 coffee-gradient rounded-2xl flex items-center justify-center shrink-0 text-white text-2xl">
+              😂
+            </div>
+            <div>
+              <h3 class="font-black text-lg text-gray-900 mb-1">Humor & Honesty</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Di namin maaayos buhay mo pero may kape kami — at tawa, at konting drama.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-5 p-6 bg-amber-50 rounded-3xl border border-amber-100">
+            <div class="w-14 h-14 coffee-gradient rounded-2xl flex items-center justify-center shrink-0 text-white text-2xl">
+              ⭐
+            </div>
+            <div>
+              <h3 class="font-black text-lg text-gray-900 mb-1">Quality You Can Taste</h3>
+              <p class="text-gray-500 text-sm leading-relaxed">Premium blends crafted with care. Because you deserve a good cup even on your worst day.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
   </section>
 
 
   <!-- ═══════════════ ADMIN PREVIEW ═══════════════ -->
   <section class="max-w-7xl mx-auto px-6 py-20" id="dashboard">
     <div class="coffee-gradient rounded-[40px] p-10 shadow-2xl text-white overflow-hidden relative">
-      <div class="absolute top-0 right-0 opacity-10 text-[250px] font-black leading-none select-none">☕</div>
       <div class="relative z-10 grid md:grid-cols-2 gap-10 items-center">
         <div>
           <span class="bg-white/20 px-4 py-2 rounded-full text-sm font-bold">SECURED ADMIN PANEL</span>
