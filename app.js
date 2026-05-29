@@ -151,10 +151,10 @@ const cartTotal = () => cart.reduce((s, i) => s + i.price * i.qty, 0);
 const totalQty  = () => cart.reduce((s, i) => s + i.qty, 0);
 
 const BADGE = {
-  Hot:     { cls: 'badge-hot',     label: '🔥 Hot' },
-  Cold:    { cls: 'badge-cold',    label: '🧊 Cold' },
-  Frappe:  { cls: 'badge-frappe',  label: '🥤 Frappe' },
-  Special: { cls: 'badge-special', label: '⭐ Special' }
+  Hot:     { cls: 'badge-hot',     label: 'Hot' },
+  Cold:    { cls: 'badge-cold',    label: 'Cold' },
+  Frappe:  { cls: 'badge-frappe',  label: 'Frappe' },
+  Special: { cls: 'badge-special', label: 'Special' }
 };
 
 // ── Render products ───────────────────────────────────────────
