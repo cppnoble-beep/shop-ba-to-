@@ -1,18 +1,301 @@
+/* ============================================================
+   Kapeng Kabado — style.css
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+
 body {
+  font-family: 'Inter', sans-serif;
   background: #f5f1eb;
-  font-family: Inter, sans-serif;
+  margin: 0;
+}
+
+/* ── Utilities ── */
+.glass {
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.3);
 }
 
 .coffee-gradient {
-  background: linear-gradient(135deg,#2b1709,#6f4e37,#d4a373);
+  background: linear-gradient(135deg, #3b2416, #8b5e3c, #d4a373);
 }
 
-.glass {
-  background: rgba(255,255,255,0.7);
-  backdrop-filter: blur(10px);
+/* ══════════════════════════════════
+   ANIMATIONS
+══════════════════════════════════ */
+
+/* Fade-up on page load for hero */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Subtle float for hero stat cards */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Card reveal on scroll (via IntersectionObserver) */
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(36px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Image zoom on card hover */
+@keyframes imgZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
+}
+
+/* Badge pulse on load */
+@keyframes badgePop {
+  0%   { transform: scale(0.6); opacity: 0; }
+  70%  { transform: scale(1.1); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* Cart count bounce */
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  40%       { transform: scale(1.4); }
+  70%       { transform: scale(0.9); }
+}
+
+/* Shimmer on Add button */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Category btn slide-in */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Hero text ── */
+.hero-text { animation: fadeUp 0.7s ease both; }
+.hero-text:nth-child(2) { animation-delay: 0.12s; }
+.hero-text:nth-child(3) { animation-delay: 0.22s; }
+
+/* ── Hero stat cards ── */
+.hero-stat {
+  animation: fadeUp 0.6s ease both, float 4s ease-in-out infinite;
+}
+.hero-stat:nth-child(1) { animation-delay: 0.2s, 0.2s; animation-duration: 0.6s, 4.2s; }
+.hero-stat:nth-child(2) { animation-delay: 0.3s, 0.3s; animation-duration: 0.6s, 3.8s; }
+.hero-stat:nth-child(3) { animation-delay: 0.4s, 0.4s; animation-duration: 0.6s, 4.5s; }
+.hero-stat:nth-child(4) { animation-delay: 0.5s, 0.5s; animation-duration: 0.6s, 4.0s; }
+
+/* ── Product cards ── */
+.product-card {
+  opacity: 0;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  will-change: transform;
+}
+.product-card.visible {
+  animation: cardReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
 .product-card:hover {
-  transform: translateY(-8px);
-  transition: 0.3s ease;
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(59, 36, 22, 0.18);
+}
+
+/* Image container clips zoom */
+.card-img-wrap {
+  overflow: hidden;
+  position: relative;
+  height: 200px;
+}
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  display: block;
+}
+.product-card:hover .card-img-wrap img {
+  transform: scale(1.07);
+}
+
+/* Gradient overlay on image bottom */
+.card-img-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 60px;
+  background: linear-gradient(to top, rgba(255,255,255,0.55), transparent);
+  pointer-events: none;
+}
+
+/* ── Badge ── */
+.badge {
+  position: absolute;
+  top: 0.65rem;
+  left: 0.65rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  animation: badgePop 0.4s ease both 0.3s;
+  backdrop-filter: blur(4px);
+}
+.badge-hot     { background: rgba(254,226,226,0.92); color: #991b1b; }
+.badge-cold    { background: rgba(219,234,254,0.92); color: #1e40af; }
+.badge-frappe  { background: rgba(237,233,254,0.92); color: #5b21b6; }
+.badge-special { background: rgba(209,250,229,0.92); color: #065f46; }
+
+/* ── Category filter buttons ── */
+.cat-btn {
+  padding: 0.45rem 1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  animation: slideIn 0.4s ease both;
+}
+.cat-btn:nth-child(1) { animation-delay: 0.05s; }
+.cat-btn:nth-child(2) { animation-delay: 0.10s; }
+.cat-btn:nth-child(3) { animation-delay: 0.15s; }
+.cat-btn:nth-child(4) { animation-delay: 0.20s; }
+.cat-btn:nth-child(5) { animation-delay: 0.25s; }
+
+.cat-btn.active             { background: #b45309; color: #fff; transform: scale(1.05); }
+.cat-btn:not(.active)       { background: #e5e7eb; color: #374151; }
+.cat-btn:not(.active):hover { background: #fef3c7; color: #92400e; transform: scale(1.03); }
+
+/* ── Qty buttons ── */
+.qty-btn {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.18s, transform 0.12s;
+  flex-shrink: 0;
+}
+.qty-btn:active { transform: scale(0.88); }
+.qty-btn.minus  { background: #fef3c7; color: #92400e; }
+.qty-btn.minus:hover { background: #fde68a; }
+.qty-btn.plus   { background: #b45309; color: #fff; }
+.qty-btn.plus:hover  { background: #92400e; }
+
+/* ── Add button (shimmer) ── */
+.add-btn {
+  background: linear-gradient(90deg, #b45309 0%, #d97706 40%, #b45309 60%, #92400e 100%);
+  background-size: 200% auto;
+  color: #fff;
+  padding: 0.45rem 1.1rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.add-btn:hover {
+  animation: shimmer 1.4s linear infinite;
+  box-shadow: 0 4px 14px rgba(180, 83, 9, 0.45);
+  transform: scale(1.04);
+}
+
+/* ── Cart count bounce ── */
+.cart-count-bounce { animation: bounce 0.4s ease; }
+
+/* ── Cart modal ── */
+#cart-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 50;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+#cart-overlay.open { display: flex; }
+
+.cart-panel {
+  transform: translateY(30px);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), opacity 0.3s ease;
+}
+#cart-overlay.open .cart-panel {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Cart count badge ── */
+#cart-count {
+  position: absolute;
+  top: -8px; right: -8px;
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.68rem;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  transition: transform 0.2s;
+}
+
+/* ── Product grid ── */
+#product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.75rem;
+}
+
+/* ── Empty cart ── */
+#empty-cart {
+  text-align: center;
+  padding: 4rem 0;
+  color: #9ca3af;
+  display: none;
+}
+#empty-cart i { font-size: 3rem; }
+
+/* ── Cart items ── */
+#cart-items { display: flex; flex-direction: column; gap: 0.85rem; }
+
+/* ── Back to top ── */
+#back-to-top {
+  position: fixed;
+  bottom: 2rem; right: 1.5rem;
+  z-index: 9999;
+  width: 42px; height: 42px;
+  border-radius: 50%; border: none; cursor: pointer;
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  color: #fff; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+}
+#back-to-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+#back-to-top:hover   { background: rgba(20,20,20,0.85); }
+#back-to-top:active  { transform: translateY(2px); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  #product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+  .card-img-wrap { height: 160px; }
 }
