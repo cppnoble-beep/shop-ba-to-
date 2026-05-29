@@ -304,3 +304,50 @@ body {
   #product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
   .card-img-wrap { height: 160px; }
 }
+
+.suggestions-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  max-height: 240px;
+  overflow-y: auto;
+  z-index: 100;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.suggestions-dropdown li {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background 0.15s;
+}
+.suggestions-dropdown li:hover,
+.suggestions-dropdown li.active {
+  background: #fef3c7;
+}
+.suggestions-dropdown li img {
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.suggestions-dropdown li .suggestion-category {
+  font-size: 0.75rem;
+  color: #8b5e3c;
+  background: #f5f1eb;
+  padding: 0.1rem 0.4rem;
+  border-radius: 99px;
+  margin-left: auto;
+}
+.suggestion-highlight {
+  color: #b45309;
+  font-weight: 600;
+}

@@ -384,3 +384,108 @@ document.addEventListener('DOMContentLoaded', () => {
     btt.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
   }
 });
+
+// ── Search suggestions ───────────────────────────────────────
+const SUGGESTIONS_LIMIT = 6; // max suggestions shown
+
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+function renderSuggestions(query) {
+  const list = document.getElementById('suggestions-list');
+  if (!query.trim() || query.length < 2) {
+    list.style.display = 'none';
+    return;
+  }
+  const q = query.toLowerCase();
+  const matches = PRODUCTS.filter(p =>
+    p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q)
+  ).slice(0, SUGGESTIONS_LIMIT);
+
+  if (!matches.length) {
+    list.style.display = 'none';
+    return;
+  }
+
+  list.innerHTML = matches.map(p => {
+    const nameHighlighted = p.name.replace(
+      new RegExp(`(${q})`, 'gi'),
+      '<span class="suggestion-highlight">$1</span>'
+    );
+    return `
+      <li data-id="${p.id}">
+        <img src="${p.image}" alt="${p.name}" loading="lazy">
+        <span>${nameHighlighted}</span>
+        <span class="suggestion-category">${p.category}</span>
+      </li>
+    `;
+  }).join('');
+  list.style.display = 'block';
+}
+
+function onSuggestionClick(e) {
+  const li = e.target.closest('li');
+  if (!li) return;
+  const product = PRODUCTS.find(p => p.id === +li.dataset.id);
+  if (!product) return;
+  document.getElementById('search-input').value = product.name;
+  document.getElementById('suggestions-list').style.display = 'none';
+  searchQuery = product.name;
+  renderProducts(); // already defined in your code
+}
+
+function initSearchSuggestions() {
+  const input = document.getElementById('search-input');
+  const list  = document.getElementById('suggestions-list');
+  if (!input || !list) return;
+
+  // Debounced input handler
+  const debouncedSuggest = debounce(() => renderSuggestions(input.value), 250);
+  input.addEventListener('input', () => {
+    searchQuery = input.value;       // update global search
+    renderProducts();                 // filter products immediately
+    debouncedSuggest();               // delayed suggestion update
+  });
+
+  // Click outside closes suggestions
+  document.addEventListener('click', (e) => {
+    if (!input.contains(e.target) && !list.contains(e.target)) {
+      list.style.display = 'none';
+    }
+  });
+
+  // Suggestion click
+  list.addEventListener('click', onSuggestionClick);
+
+  // Keyboard navigation (optional)
+  input.addEventListener('keydown', (e) => {
+    if (list.style.display === 'none') return;
+    const items = list.querySelectorAll('li');
+    let activeIdx = [...items].findIndex(li => li.classList.contains('active'));
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      activeIdx = (activeIdx + 1) % items.length;
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      activeIdx = (activeIdx - 1 + items.length) % items.length;
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (activeIdx >= 0 && items[activeIdx]) {
+        items[activeIdx].click();
+      }
+      return;
+    } else return;
+
+    items.forEach(li => li.classList.remove('active'));
+    items[activeIdx]?.classList.add('active');
+    items[activeIdx]?.scrollIntoView({ block: 'nearest' });
+  });
+}
+
+// Call inside DOMContentLoaded:
+initSearchSuggestions();
