@@ -81,7 +81,9 @@
     <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 rounded-full coffee-gradient flex items-center justify-center text-white text-xl font-bold">
-          <img src="assets/kapeng-kabado-logo.png" alt="brand-logo">
+          <a href="index.html">
+            <img src="assets/kapeng-kabado-logo.png" alt="brand-logo">
+          </a>
         </div>
         <div>
           <h1 class="text-2xl font-bold">Kapeng Kabado</h1>
@@ -113,7 +115,7 @@
           Premium Coffee Delivered Fresh
         </h1>
         <p class="mt-6 text-lg text-amber-100">
-          A complete coffee shop e-commerce platform inspired by Shopee, Lazada, and Amazon.
+          Every sip, overthink malala. Gising ka na nga, kabado ka pa! 
         </p>
 
         <div class="mt-8 flex gap-4">
@@ -273,275 +275,6 @@
   </div>
 </section>
 
-<!-- ADMIN.HTML TEMPLATE -->
-<script type="text/plain" id="admin-template">
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BrewCart Admin Dashboard</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<style>
-body {
-  background: #f5f1eb;
-  font-family: Inter, sans-serif;
-}
-.sidebar-gradient {
-  background: linear-gradient(180deg,#2b1709,#5c3b24,#8b5e3c);
-}
-</style>
-</head>
-<body x-data="adminApp()">
-
-<div x-show="!loggedIn" class="min-h-screen flex items-center justify-center p-6">
-  <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden grid lg:grid-cols-2 max-w-6xl w-full">
-
-    <div class="sidebar-gradient text-white p-14 flex flex-col justify-center relative overflow-hidden">
-      <div class="absolute top-0 right-0 text-[250px] opacity-10 font-black">☕</div>
-
-      <div class="relative z-10">
-        <h1 class="text-6xl font-black leading-tight">
-          BrewCart
-          Admin
-        </h1>
-
-        <p class="mt-6 text-amber-100 text-lg">
-          Premium Coffee Shop Management System.
-        </p>
-
-        <div class="mt-10 space-y-5">
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-              📦
-            </div>
-            <div>
-              <h3 class="font-bold text-xl">Orders Management</h3>
-              <p class="text-amber-100 text-sm">Track and manage deliveries</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-              📈
-            </div>
-            <div>
-              <h3 class="font-bold text-xl">Sales Analytics</h3>
-              <p class="text-amber-100 text-sm">View revenue and performance</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-              🔒
-            </div>
-            <div>
-              <h3 class="font-bold text-xl">Secure Authentication</h3>
-              <p class="text-amber-100 text-sm">Protected admin access</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-14 flex flex-col justify-center">
-      <div>
-        <span class="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-bold">
-          ADMIN LOGIN
-        </span>
-
-        <h2 class="text-5xl font-black mt-6">
-          Welcome Back
-        </h2>
-
-        <p class="mt-4 text-gray-500 text-lg">
-          Login to manage your coffee business.
-        </p>
-      </div>
-
-      <div class="mt-10 space-y-6">
-        <div>
-          <label class="font-bold text-gray-700">Email Address</label>
-          <input
-            x-model="email"
-            type="email"
-            placeholder="Enter admin email"
-            class="w-full mt-3 border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-amber-200"
-          >
-        </div>
-
-        <div>
-          <label class="font-bold text-gray-700">Password</label>
-          <input
-            x-model="password"
-            type="password"
-            placeholder="Enter password"
-            class="w-full mt-3 border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-amber-200"
-          >
-        </div>
-
-        <button
-          @click="login()"
-          class="w-full bg-amber-700 text-white py-5 rounded-2xl text-xl font-black shadow-xl hover:bg-amber-800 transition"
-        >
-          Login Dashboard
-        </button>
-
-        
-      </div>
-    </div>
-  </div>
-</div>
-
-<div x-show="loggedIn" class="flex min-h-screen">
-
-  <aside class="w-80 sidebar-gradient text-white p-8 hidden lg:block">
-    <div class="flex items-center gap-4 mb-14">
-      <div class="w-16 h-16 rounded-3xl bg-white/20 flex items-center justify-center text-3xl">
-        ☕
-      </div>
-
-      <div>
-        <h1 class="text-3xl font-black">BrewCart</h1>
-        <p class="text-amber-100">Admin Dashboard</p>
-      </div>
-    </div>
-
-    <nav class="space-y-3">
-      <a href="#" class="flex items-center gap-4 bg-white/10 px-5 py-4 rounded-2xl font-bold">
-        <i class="fa-solid fa-chart-line"></i>
-        Dashboard
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-box"></i>
-        Products
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-cart-shopping"></i>
-        Orders
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-users"></i>
-        Customers
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-credit-card"></i>
-        Payments
-      </a>
-    </nav>
-  </aside>
-
-  <main class="flex-1 p-8">
-    <div class="flex items-center justify-between mb-10">
-      <div>
-        <h1 class="text-5xl font-black">Coffee Analytics</h1>
-        <p class="text-gray-500 mt-3">Manage your coffee business system.</p>
-      </div>
-
-      <button
-        @click="logout()"
-        class="bg-red-500 text-white px-6 py-3 rounded-2xl font-bold hover:bg-red-600"
-      >
-        Logout
-      </button>
-    </div>
-
-    <div class="grid md:grid-cols-4 gap-6 mb-10">
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Revenue</p>
-        <h2 class="text-5xl font-black mt-3">₱82K</h2>
-      </div>
-
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Orders</p>
-        <h2 class="text-5xl font-black mt-3">524</h2>
-      </div>
-
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Customers</p>
-        <h2 class="text-5xl font-black mt-3">1.2K</h2>
-      </div>
-
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Products</p>
-        <h2 class="text-5xl font-black mt-3">150</h2>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden">
-      <div class="p-8 border-b">
-        <h2 class="text-3xl font-black">Latest Orders</h2>
-      </div>
-
-      <table class="w-full">
-        <thead class="bg-amber-700 text-white">
-          <tr>
-            <th class="p-5 text-left">Order ID</th>
-            <th class="p-5 text-left">Customer</th>
-            <th class="p-5 text-left">Product</th>
-            <th class="p-5 text-left">Status</th>
-            <th class="p-5 text-left">Price</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <template x-for="order in orders">
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-5" x-text="order.id"></td>
-              <td class="p-5" x-text="order.customer"></td>
-              <td class="p-5" x-text="order.item"></td>
-              <td class="p-5">
-                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-bold" x-text="order.status"></span>
-              </td>
-              <td class="p-5">₱<span x-text="order.price"></span></td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
-    </div>
-  </main>
-</div>
-
-<script>
-function adminApp() {
-  return {
-    email: '',
-    password: '',
-    loggedIn: false,
-
-    orders: JSON.parse(localStorage.getItem('orders')) || [],
-
-    login() {
-      if(this.email === 'admin@brewcart.com' && this.password === 'brewcart123') {
-        this.loggedIn = true;
-        localStorage.setItem('adminLoggedIn', true);
-      } else {
-        alert('Invalid admin credentials');
-      }
-    },
-
-    logout() {
-      this.loggedIn = false;
-      localStorage.removeItem('adminLoggedIn');
-    },
-
-    init() {
-      this.loggedIn = localStorage.getItem('adminLoggedIn') === 'true';
-    }
-  }
-}
-</script>
-
-</body>
-</html>
-</script>
-
 <!-- CART MODAL -->
   <div
     x-show="showCart"
@@ -603,9 +336,9 @@ function adminApp() {
   <footer class="coffee-gradient text-white py-12 mt-20">
     <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
       <div>
-        <h2 class="text-3xl font-black">BrewCart</h2>
+        <h2 class="text-3xl font-black">Kapeng Kabado</h2>
         <p class="mt-4 text-amber-100">
-          Modern coffee e-commerce platform using HTML, CSS, JavaScript, JSON, TailwindCSS, and Alpine.js.
+          Di namin maaayos buhay mo pero may kape kami
         </p>
       </div>
 
@@ -640,7 +373,8 @@ function adminApp() {
       </div>
     </div>
   </footer>
-
+</body>
+</html>
   <script>
     // Select the back-to-top button by its ID
     const backToTopButton = document.getElementById('back-to-top');
