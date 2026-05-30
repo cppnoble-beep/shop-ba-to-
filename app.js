@@ -407,6 +407,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('close-cart')?.addEventListener('click', closeCart);
   document.getElementById('cart-overlay')?.addEventListener('click', e => { if (e.target === document.getElementById('cart-overlay')) closeCart(); });
   document.getElementById('checkout-btn')?.addEventListener('click', checkout);
+  document.getElementById('search-button')?.addEventListener('click', () => {
+    const input = document.getElementById('search-input');
+    if (!input) return;
+    searchQuery = input.value;
+    renderProducts();
+  });
 
   document.querySelectorAll('input[name="size"]').forEach(radio => {
     radio.addEventListener('change', () => {
