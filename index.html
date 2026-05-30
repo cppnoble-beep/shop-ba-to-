@@ -34,22 +34,28 @@
       </div>
 
       <!-- Right side -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <!-- Hamburger (mobile only) -->
-        <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-amber-50 transition" aria-label="Open menu">
-          <span class="ham-line"></span>
-          <span class="ham-line"></span>
-          <span class="ham-line"></span>
-        </button>
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Hamburger (mobile only) -->
+          <button id="hamburger" class="md:hidden flex flex-col gap-1.5 p-2 rounded-lg hover:bg-amber-50 transition" aria-label="Open menu">
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+            <span class="ham-line"></span>
+          </button>
 
-        <!-- Cart -->
-        <button id="open-cart"
-          class="relative bg-amber-700 text-white px-3 sm:px-4 py-2 rounded-xl shadow-lg hover:bg-amber-800 transition-all nav-cart shrink-0">
-          <i class="fa-solid fa-cart-shopping"></i>
-          <span class="ml-1 sm:ml-2 hidden sm:inline font-semibold">Cart</span>
-          <span id="cart-count">0</span>
-        </button>
-      </div>
+          <!-- Cart -->
+          <button id="open-cart"
+            class="relative bg-amber-700 text-white px-3 sm:px-4 py-2 rounded-xl shadow-lg hover:bg-amber-800 transition-all nav-cart shrink-0">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="ml-1 sm:ml-2 hidden sm:inline font-semibold">Cart</span>
+            <span id="cart-count">0</span>
+          </button>
+
+          <button id="open-cart"
+            class="relative bg-amber-700 text-white px-3 sm:px-4 py-2 rounded-xl shadow-lg hover:bg-amber-800 transition-all nav-cart shrink-0">
+            <i class="fa-solid fa-user"></i>
+            <span class="ml-1 sm:ml-2 hidden sm:inline font-semibold"><a href="login.html">Account</a></span>
+          </button>
+        </div>
     </div>
 
     <!-- Mobile menu -->

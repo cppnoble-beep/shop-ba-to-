@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — Kapeng Kabado</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown-deep:  #2c1a0e;
+      --brown-mid:   #7c4a2d;
+      --brown-light: #c8845a;
+      --cream:       #f5f0e8;
+      --cream-dark:  #ede5d8;
+      --amber:       #d4862a;
+      --amber-light: #f0a84a;
+      --text-dark:   #1a0f08;
+      --text-mid:    #5c3d26;
+      --text-soft:   #9e7a5e;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background texture ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, rgba(180,100,40,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 90%, rgba(80,30,10,0.1) 0%, transparent 60%),
+        url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c8845a' fill-opacity='0.04'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50%       { transform: translateY(-8px) rotate(2deg); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -300% center; }
+      100% { background-position:  300% center; }
+    }
+    @keyframes ringPulse {
+      0%   { transform: scale(1);   opacity: 0.6; }
+      100% { transform: scale(1.6); opacity: 0; }
+    }
+    @keyframes slideTab {
+      from { opacity: 0; transform: translateX(12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes checkPop {
+      0%   { transform: scale(0); opacity: 0; }
+      60%  { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+
+    /* ── Layout ── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      gap: 1.5rem;
+    }
+
+    /* ── Brand header ── */
+    .brand-header {
+      text-align: center;
+      animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .logo-ring-wrap {
+      position: relative;
+      width: 72px; height: 72px;
+      margin: 0 auto 1rem;
+    }
+    .logo-ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid var(--amber);
+      opacity: 0.6;
+      animation: ringPulse 2.4s ease-out infinite;
+    }
+    .logo-ring:nth-child(2) { animation-delay: 0.8s; }
+    .logo-circle {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--brown-deep), var(--brown-mid), var(--brown-light));
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      animation: logoFloat 5s ease-in-out infinite;
+      box-shadow: 0 8px 32px rgba(44,26,14,0.3);
+    }
+    .logo-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .logo-fallback { color: #fff; font-weight: 900; font-size: 1.2rem; font-family: 'Playfair Display', serif; }
+
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--brown-deep) 0%, var(--brown-mid) 45%, var(--amber) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+    .brand-sub {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      margin-top: 0.2rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    /* ── Card ── */
+    .auth-card {
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(200,132,90,0.2);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 440px;
+      padding: 2rem;
+      box-shadow:
+        0 4px 6px rgba(44,26,14,0.04),
+        0 12px 40px rgba(44,26,14,0.1),
+        0 32px 64px rgba(44,26,14,0.06),
+        inset 0 1px 0 rgba(255,255,255,0.8);
+      animation: fadeUp 0.65s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+    }
+
+    /* ── Tabs ── */
+    .tab-bar {
+      display: flex;
+      background: var(--cream-dark);
+      border-radius: 14px;
+      padding: 4px;
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+    .tab-slider {
+      position: absolute;
+      top: 4px; bottom: 4px;
+      width: calc(50% - 4px);
+      background: #fff;
+      border-radius: 11px;
+      box-shadow: 0 2px 8px rgba(44,26,14,0.12);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .tab-slider.signup { transform: translateX(calc(100% + 8px)); }
+    .tab-btn {
+      flex: 1;
+      position: relative;
+      z-index: 1;
+      padding: 0.6rem;
+      border: none;
+      background: transparent;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      border-radius: 11px;
+      transition: color 0.25s;
+      color: var(--text-soft);
+    }
+    .tab-btn.active { color: var(--brown-deep); }
+
+    /* ── Section heading ── */
+    .form-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      margin-bottom: 0.25rem;
+    }
+    .form-sub {
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Input groups ── */
+    .input-group {
+      margin-bottom: 1rem;
+      animation: slideTab 0.35s ease both;
+    }
+    .input-label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.78rem;
+      color: var(--text-mid);
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.01em;
+    }
+    .input-wrap {
+      position: relative;
+    }
+    .input-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      pointer-events: none;
+      transition: color 0.2s;
+    }
+    .form-field {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid rgba(200,132,90,0.25);
+      border-radius: 12px;
+      padding: 0.75rem 0.9rem 0.75rem 2.4rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.875rem;
+      color: var(--text-dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .form-field:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 0 3px rgba(212,134,42,0.12);
+      background: #fff;
+    }
+    .form-field:focus + .input-icon,
+    .input-wrap:focus-within .input-icon { color: var(--amber); }
+    .form-field.error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.1); animation: shake 0.4s ease; }
+
+    /* Password toggle */
+    .pw-toggle {
+      position: absolute;
+      right: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-soft);
+      cursor: pointer;
+      font-size: 0.85rem;
+      padding: 0.2rem;
+      transition: color 0.2s;
+    }
+    .pw-toggle:hover { color: var(--amber); }
+
+    /* ── Two-col row ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+    /* ── Divider ── */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.25rem 0;
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      font-weight: 500;
+    }
+    .or-divider::before, .or-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(200,132,90,0.2);
+    }
+
+    /* ── Remember me / Forgot pw ── */
+    .row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .check-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-mid);
+      cursor: pointer;
+      font-weight: 500;
+      user-select: none;
+    }
+    .custom-check {
+      width: 17px; height: 17px;
+      border: 1.5px solid rgba(200,132,90,0.4);
+      border-radius: 5px;
+      background: var(--cream);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .custom-check.checked {
+      background: var(--amber);
+      border-color: var(--amber);
+    }
+    .custom-check .check-icon {
+      display: none;
+      color: #fff;
+      font-size: 0.6rem;
+    }
+    .custom-check.checked .check-icon { display: block; animation: checkPop 0.25s ease both; }
+
+    .forgot-link {
+      font-size: 0.8rem;
+      color: var(--amber);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .forgot-link:hover { color: var(--brown-mid); }
+
+    /* ── Submit button ── */
+    .submit-btn {
+      width: 100%;
+      padding: 0.85rem;
+      border: none;
+      border-radius: 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      background: linear-gradient(90deg, var(--brown-deep) 0%, var(--brown-mid) 40%, var(--amber) 70%, var(--brown-mid) 100%);
+      background-size: 200% auto;
+      color: #fff;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(44,26,14,0.25);
+      margin-bottom: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .submit-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.2s;
+    }
+    .submit-btn:hover {
+      animation: shimmer 1.6s linear infinite;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(44,26,14,0.3);
+    }
+    .submit-btn:active { transform: scale(0.97); }
+    .submit-btn.loading { pointer-events: none; opacity: 0.8; }
+
+    /* Spinner inside button */
+    .btn-spinner {
+      display: none;
+      width: 16px; height: 16px;
+      border: 2.5px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 0.5rem;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .submit-btn.loading .btn-spinner { display: inline-block; }
+
+    /* ── Switch link ── */
+    .switch-text {
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+    }
+    .switch-link {
+      color: var(--amber);
+      font-weight: 700;
+      cursor: pointer;
+      transition: color 0.2s;
+      text-decoration: none;
+    }
+    .switch-link:hover { color: var(--brown-mid); }
+
+    /* ── Terms ── */
+    .terms-text {
+      font-size: 0.75rem;
+      color: var(--text-soft);
+      text-align: center;
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+    .terms-text a { color: var(--amber); text-decoration: none; font-weight: 600; }
+
+    /* ── Alert box ── */
+    .alert {
+      display: none;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .alert.show { display: flex; animation: fadeIn 0.25s ease both; }
+    .alert.error { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .alert.success { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+
+    /* ── Password strength ── */
+    .strength-bar {
+      display: flex;
+      gap: 3px;
+      margin-top: 0.4rem;
+    }
+    .strength-seg {
+      flex: 1;
+      height: 3px;
+      border-radius: 99px;
+      background: #e5e7eb;
+      transition: background 0.3s;
+    }
+
+    /* ── Back link ── */
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-soft);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+      animation: fadeIn 0.5s ease 0.3s both;
+    }
+    .back-link:hover { color: var(--amber); }
+
+    /* ── Success state ── */
+    #success-state { display: none; text-align: center; }
+    #success-state .big-check {
+      width: 70px; height: 70px;
+      background: linear-gradient(135deg, #16a34a, #22c55e);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 1.25rem;
+      box-shadow: 0 8px 24px rgba(22,163,74,0.3);
+      animation: checkPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+
+    /* ── Tagline strip ── */
+    .tagline-strip {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      text-align: center;
+      font-style: italic;
+      animation: fadeIn 0.5s ease 0.5s both;
+    }
+
+    @media (max-width: 480px) {
+      .auth-card { padding: 1.5rem; border-radius: 24px; }
+      .two-col { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- Back to menu -->
+  <a href="index.html" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back to Menu
+  </a>
+
+  <!-- Brand header -->
+  <div class="brand-header">
+    <div class="logo-ring-wrap">
+      <div class="logo-ring"></div>
+      <div class="logo-ring"></div>
+      <div class="logo-circle">
+        <img src="assets/kapeng-kabado-logo.png" alt="KK"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <span class="logo-fallback" style="display:none;width:100%;height:100%;align-items:center;justify-content:center;">KK</span>
+      </div>
+    </div>
+    <h1 class="brand-name">Kapeng Kabado</h1>
+    <p class="brand-sub">Premium Coffee Shop</p>
+  </div>
+
+  <!-- Auth card -->
+  <div class="auth-card">
+
+    <!-- Alert -->
+    <div id="alert-box" class="alert"></div>
+
+    <!-- Tabs -->
+    <div class="tab-bar" id="tab-bar">
+      <div class="tab-slider" id="tab-slider"></div>
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">
+        <i class="fa-solid fa-mug-hot" style="margin-right:0.3rem;font-size:0.75rem;"></i>Sign In
+      </button>
+      <button class="tab-btn" id="tab-signup" onclick="switchTab('signup')">
+        <i class="fa-solid fa-user-plus" style="margin-right:0.3rem;font-size:0.75rem;"></i>Create Account
+      </button>
+    </div>
+
+    <!-- ── LOGIN FORM ── -->
+    <div id="login-form">
+      <h2 class="form-heading">Welcome back!</h2>
+      <p class="form-sub">Sign in to your Kabado account para pre-filled na ang checkout mo.</p>
+
+      <div class="input-group" style="animation-delay:0.05s;">
+        <label class="input-label">Email Address</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input id="login-email" type="email" class="form-field" placeholder="juan@example.com">
+        </div>
+      </div>
+
+      <div class="input-group" style="animation-delay:0.1s;">
+        <label class="input-label">Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input id="login-password" type="password" class="form-field" placeholder="••••••••" style="padding-right:2.8rem;">
+          <button type="button" class="pw-toggle" onclick="togglePw('login-password', this)">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row-between">
+        <label class="check-label" onclick="toggleCheck('remember-check')">
+          <div class="custom-check" id="remember-check">
+            <i class="fa-solid fa-check check-icon"></i>
+          </div>
+          Remember me
+        </label>
+        <a href="#" class="forgot-link" onclick="showForgot(event)">Forgot password?</a>
+      </div>
+
+      <button class="submit-btn" onclick="doLogin()">
+        <span class="btn-spinner" id="login-spinner"></span>
+        <i class="fa-solid fa-mug-hot" style="margin-right:0.4rem;"></i>Sign In
+      </button>
+
+      <p class="switch-text">
+        Wala pang account? <a class="switch-link" onclick="switchTab('signup')">Create one — libre!</a>
+      </p>
+    </div>
+
+    <!-- ── SIGNUP FORM ── -->
+    <div id="signup-form" style="display:none;">
+      <h2 class="form-heading">Join the Kabadohood</h2>
+      <p class="form-sub">One account, mas mabilis na checkout forever. ☕</p>
+
+      <div class="two-col">
+        <div class="input-group" style="animation-delay:0.05s;">
+          <label class="input-label">First Name</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input id="reg-firstname" type="text" class="form-field" placeholder="Juan">
+          </div>
+        </div>
+        <div class="input-group" style="animation-delay:0.1s;">
+          <label class="input-label">Last Name</label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-user input-icon"></i>
+            <input id="reg-lastname" type="text" class="form-field" placeholder="dela Cruz">
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group" style="animation-delay:0.12s;">
+        <label class="input-label">Phone Number</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-phone input-icon"></i>
+          <input id="reg-phone" type="tel" class="form-field" placeholder="09XX XXX XXXX">
+        </div>
+      </div>
+
+      <div class="input-group" style="animation-delay:0.14s;">
+        <label class="input-label">Delivery Address</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-location-dot input-icon"></i>
+          <input id="reg-address" type="text" class="form-field" placeholder="House No., Street, Barangay, City">
+        </div>
+      </div>
+
+      <div class="input-group" style="animation-delay:0.16s;">
+        <label class="input-label">Email Address</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope input-icon"></i>
+          <input id="reg-email" type="email" class="form-field" placeholder="juan@example.com">
+        </div>
+      </div>
+
+      <div class="input-group" style="animation-delay:0.18s;">
+        <label class="input-label">Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input id="reg-password" type="password" class="form-field" placeholder="Min. 8 characters" style="padding-right:2.8rem;" oninput="checkStrength(this.value)">
+          <button type="button" class="pw-toggle" onclick="togglePw('reg-password', this)">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+        <div class="strength-bar" id="strength-bar">
+          <div class="strength-seg" id="s1"></div>
+          <div class="strength-seg" id="s2"></div>
+          <div class="strength-seg" id="s3"></div>
+          <div class="strength-seg" id="s4"></div>
+        </div>
+        <p id="strength-label" style="font-size:0.72rem;color:var(--text-soft);margin-top:0.25rem;height:1rem;"></p>
+      </div>
+
+      <div class="input-group" style="animation-delay:0.2s;">
+        <label class="input-label">Confirm Password</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock input-icon"></i>
+          <input id="reg-confirm" type="password" class="form-field" placeholder="Re-enter password" style="padding-right:2.8rem;">
+          <button type="button" class="pw-toggle" onclick="togglePw('reg-confirm', this)">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <button class="submit-btn" onclick="doSignup()">
+        <span class="btn-spinner" id="signup-spinner"></span>
+        <i class="fa-solid fa-user-plus" style="margin-right:0.4rem;"></i>Create My Account
+      </button>
+
+      <p class="terms-text">
+        By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+
+      <p class="switch-text" style="margin-top:0.75rem;">
+        May account na? <a class="switch-link" onclick="switchTab('login')">Sign in here</a>
+      </p>
+    </div>
+
+    <!-- ── SUCCESS STATE ── -->
+    <div id="success-state">
+      <div class="big-check">✓</div>
+      <h2 class="form-heading" style="text-align:center;" id="success-title">Account Created!</h2>
+      <p class="form-sub" style="text-align:center;" id="success-msg">Welcome sa Kabadohood! Redirecting you...</p>
+      <div style="background:var(--cream);border-radius:14px;padding:0.9rem 1rem;margin:1rem 0;">
+        <p style="font-size:0.72rem;color:var(--text-soft);margin-bottom:0.2rem;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Logged in as</p>
+        <p id="success-name" style="font-weight:900;color:var(--brown-deep);font-size:1rem;font-family:'Playfair Display',serif;"></p>
+        <p id="success-email" style="font-size:0.8rem;color:var(--text-soft);margin-top:0.1rem;"></p>
+      </div>
+      <a href="index.html" style="display:block;text-align:center;background:linear-gradient(135deg,var(--brown-deep),var(--brown-mid),var(--amber));color:#fff;padding:0.85rem;border-radius:14px;font-weight:700;text-decoration:none;font-family:'DM Sans',sans-serif;">
+        <i class="fa-solid fa-mug-hot" style="margin-right:0.4rem;"></i>Go to Menu
+      </a>
+    </div>
+
+  </div><!-- end auth-card -->
+
+  <!-- Tagline -->
+  <p class="tagline-strip">"Gising ka na nga, kabado ka pa." ☕</p>
+
+</div><!-- end page-wrap -->
+
+
+<script>
+  // ── Simple localStorage-based auth ─────────────────────────
+  // In a real app this would hit a backend. Here we store hashed-ish passwords
+  // and user profiles in localStorage for demo purposes.
+
+  const USERS_KEY   = 'kk_users';
+  const SESSION_KEY = 'kk_session';
+
+  function getUsers() {
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+    catch(e) { return []; }
+  }
+  function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
+  function setSession(user) {
+    const sess = { email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone, address: user.address, loggedIn: true };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+  }
+  function getSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)) || null; }
+    catch(e) { return null; }
+  }
+
+  // Simple hash (NOT for production — just obfuscates in localStorage)
+  function simpleHash(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    return 'kk_' + Math.abs(h).toString(36);
+  }
+
+  // ── Redirect if already logged in ──────────────────────────
+  window.addEventListener('DOMContentLoaded', () => {
+    const sess = getSession();
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from') || 'index.html';
+
+    if (sess && sess.loggedIn) {
+      // Already logged in — show success immediately and redirect
+      showSuccessState(sess.firstName + ' ' + sess.lastName, sess.email);
+      setTimeout(() => { window.location.href = from; }, 1500);
+    }
+
+    // Check remember me
+    if (localStorage.getItem('kk_remember') === '1') {
+      document.getElementById('remember-check').classList.add('checked');
+    }
+  });
+
+  // ── Tab switching ───────────────────────────────────────────
+  let currentTab = 'login';
+  function switchTab(tab) {
+    currentTab = tab;
+    const isLogin = tab === 'login';
+
+    document.getElementById('login-form').style.display  = isLogin ? 'block' : 'none';
+    document.getElementById('signup-form').style.display = isLogin ? 'none' : 'block';
+    document.getElementById('success-state').style.display = 'none';
+
+    document.getElementById('tab-login').classList.toggle('active', isLogin);
+    document.getElementById('tab-signup').classList.toggle('active', !isLogin);
+    document.getElementById('tab-slider').classList.toggle('signup', !isLogin);
+
+    clearAlert();
+  }
+
+  // ── Alert helpers ───────────────────────────────────────────
+  function showAlert(msg, type = 'error') {
+    const box = document.getElementById('alert-box');
+    box.className = 'alert show ' + type;
+    box.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> ${msg}`;
+  }
+  function clearAlert() {
+    const box = document.getElementById('alert-box');
+    box.className = 'alert';
+    box.innerHTML = '';
+  }
+
+  // ── Toggle password visibility ──────────────────────────────
+  function togglePw(id, btn) {
+    const inp = document.getElementById(id);
+    const icon = btn.querySelector('i');
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      icon.className = 'fa-solid fa-eye-slash';
+    } else {
+      inp.type = 'password';
+      icon.className = 'fa-solid fa-eye';
+    }
+  }
+
+  // ── Custom checkbox ─────────────────────────────────────────
+  function toggleCheck(id) {
+    document.getElementById(id).classList.toggle('checked');
+  }
+
+  // ── Password strength ───────────────────────────────────────
+  function checkStrength(val) {
+    let score = 0;
+    if (val.length >= 8)           score++;
+    if (/[A-Z]/.test(val))         score++;
+    if (/[0-9]/.test(val))         score++;
+    if (/[^A-Za-z0-9]/.test(val))  score++;
+
+    const colors = ['', '#ef4444', '#f97316', '#eab308', '#22c55e'];
+    const labels = ['', 'Mahina', 'Fair', 'Malakas', 'Super Malakas!'];
+
+    for (let i = 1; i <= 4; i++) {
+      document.getElementById('s' + i).style.background = i <= score ? colors[score] : '#e5e7eb';
+    }
+    document.getElementById('strength-label').textContent = val.length ? labels[score] : '';
+    document.getElementById('strength-label').style.color = colors[score] || 'var(--text-soft)';
+  }
+
+  // ── Field error ─────────────────────────────────────────────
+  function fieldError(id) {
+    const el = document.getElementById(id);
+    el.classList.add('error');
+    el.addEventListener('input', () => el.classList.remove('error'), { once: true });
+    el.focus();
+  }
+
+  // ── Forgot password ─────────────────────────────────────────
+  function showForgot(e) {
+    e.preventDefault();
+    showAlert('Para sa password reset, mag-email sa hello@kapengkabado.ph 😊', 'error');
+  }
+
+  // ── LOGIN ───────────────────────────────────────────────────
+  function doLogin() {
+    clearAlert();
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const remember = document.getElementById('remember-check').classList.contains('checked');
+
+    if (!email)    { fieldError('login-email');    return; }
+    if (!password) { fieldError('login-password'); return; }
+
+    const btn = document.querySelector('#login-form .submit-btn');
+    btn.classList.add('loading');
+    document.getElementById('login-spinner').style.display = 'inline-block';
+
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      document.getElementById('login-spinner').style.display = 'none';
+
+      const users = getUsers();
+      const user  = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+      if (!user || user.password !== simpleHash(password)) {
+        showAlert('Mali ang email o password. Subukan ulit!');
+        fieldError('login-email');
+        fieldError('login-password');
+        return;
+      }
+
+      // Remember me
+      if (remember) { localStorage.setItem('kk_remember', '1'); }
+      else          { localStorage.removeItem('kk_remember'); }
+
+      setSession(user);
+      showSuccessState(user.firstName + ' ' + user.lastName, user.email);
+
+      const params = new URLSearchParams(window.location.search);
+      const from   = params.get('from') || 'index.html';
+      setTimeout(() => { window.location.href = from; }, 1500);
+    }, 900); // simulate network
+  }
+
+  // ── SIGN UP ─────────────────────────────────────────────────
+  function doSignup() {
+    clearAlert();
+    const firstName = document.getElementById('reg-firstname').value.trim();
+    const lastName  = document.getElementById('reg-lastname').value.trim();
+    const phone     = document.getElementById('reg-phone').value.trim();
+    const address   = document.getElementById('reg-address').value.trim();
+    const email     = document.getElementById('reg-email').value.trim();
+    const password  = document.getElementById('reg-password').value;
+    const confirm   = document.getElementById('reg-confirm').value;
+
+    if (!firstName) { fieldError('reg-firstname'); showAlert('Ilagay ang iyong first name.'); return; }
+    if (!lastName)  { fieldError('reg-lastname');  showAlert('Ilagay ang iyong last name.'); return; }
+    if (!phone)     { fieldError('reg-phone');     showAlert('Kailangan ng phone number para sa delivery.'); return; }
+    if (!address)   { fieldError('reg-address');   showAlert('Ilagay ang iyong delivery address.'); return; }
+    if (!email || !email.includes('@')) { fieldError('reg-email'); showAlert('Valid email address please!'); return; }
+    if (password.length < 8)  { fieldError('reg-password'); showAlert('Password dapat at least 8 characters.'); return; }
+    if (password !== confirm)  { fieldError('reg-confirm');  showAlert('Hindi magkapareho ang passwords!'); return; }
+
+    const btn = document.querySelector('#signup-form .submit-btn');
+    btn.classList.add('loading');
+    document.getElementById('signup-spinner').style.display = 'inline-block';
+
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      document.getElementById('signup-spinner').style.display = 'none';
+
+      const users = getUsers();
+      if (users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+        showAlert('May account na ang email na iyan. Mag-login ka na lang!');
+        fieldError('reg-email');
+        return;
+      }
+
+      const newUser = { firstName, lastName, phone, address, email, password: simpleHash(password), createdAt: new Date().toISOString() };
+      users.push(newUser);
+      saveUsers(users);
+      setSession(newUser);
+
+      showSuccessState(firstName + ' ' + lastName, email);
+      const params = new URLSearchParams(window.location.search);
+      const from   = params.get('from') || 'index.html';
+      setTimeout(() => { window.location.href = from; }, 2000);
+    }, 1000);
+  }
+
+  // ── Show success state ──────────────────────────────────────
+  function showSuccessState(name, email) {
+    document.getElementById('login-form').style.display    = 'none';
+    document.getElementById('signup-form').style.display   = 'none';
+    document.getElementById('tab-bar').style.display       = 'none';
+    document.getElementById('success-state').style.display = 'block';
+    document.getElementById('success-name').textContent    = name;
+    document.getElementById('success-email').textContent   = email;
+
+    const title = document.getElementById('success-title');
+    const msg   = document.getElementById('success-msg');
+    if (currentTab === 'login') {
+      title.textContent = 'Welcome back!';
+      msg.textContent   = 'Nandito ka na ulit. Papunta na sa menu... ☕';
+    } else {
+      title.textContent = 'Account Created!';
+      msg.textContent   = 'Welcome sa Kabadohood! Papunta na sa menu... ☕';
+    }
+  }
+</script>
+
+</body>
+</html>

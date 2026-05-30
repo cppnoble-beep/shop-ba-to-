@@ -40,7 +40,6 @@
       overflow: hidden;
       animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
     }
-
     .section-header {
       padding: 1.1rem 1.5rem;
       background: linear-gradient(135deg, #3b2416, #8b5e3c, #d4a373);
@@ -50,7 +49,6 @@
       gap: 0.75rem;
     }
     .section-header h3 { font-weight: 900; font-size: 1rem; margin: 0; }
-    .section-header i { font-size: 1rem; opacity: 0.9; }
 
     /* ── Order item ── */
     .order-item {
@@ -61,187 +59,122 @@
       animation: fadeUp 0.4s ease both;
     }
     .order-item:last-child { border-bottom: none; }
-    .order-item img {
-      width: 64px; height: 64px;
-      border-radius: 14px;
-      object-fit: cover;
-      flex-shrink: 0;
-    }
-    .item-name { font-weight: 900; font-size: 0.875rem; color: #1f2937; line-height: 1.3; }
-    .item-tagline { font-size: 0.72rem; color: #b45309; font-style: italic; font-weight: 600; margin-top: 0.15rem; }
-    .item-price { font-weight: 900; font-size: 0.9rem; color: #92400e; white-space: nowrap; }
+    .order-item img { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; flex-shrink: 0; }
+    .item-name     { font-weight: 900; font-size: 0.875rem; color: #1f2937; line-height: 1.3; }
+    .item-tagline  { font-size: 0.72rem; color: #b45309; font-style: italic; font-weight: 600; margin-top: 0.15rem; }
+    .item-price    { font-weight: 900; font-size: 0.9rem; color: #92400e; white-space: nowrap; }
     .item-unit-price { font-size: 0.72rem; color: #9ca3af; }
 
-    /* ── Tags ── */
-    .tag {
-      display: inline-block;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.18rem 0.55rem;
-      border-radius: 99px;
-      margin: 0.15rem 0.1rem 0 0;
-    }
-    .tag-size    { background: #fef3c7; color: #92400e; }
-    .tag-sugar   { background: #fce7f3; color: #9d174d; }
-    .tag-ice     { background: #e0f2fe; color: #075985; }
-    .tag-addon   { background: #ede9fe; color: #5b21b6; }
-    .tag-note    { background: #f3f4f6; color: #4b5563; font-style: italic; }
+    .tag { display:inline-block; font-size:0.68rem; font-weight:700; padding:0.18rem 0.55rem; border-radius:99px; margin:0.15rem 0.1rem 0 0; }
+    .tag-size  { background:#fef3c7; color:#92400e; }
+    .tag-sugar { background:#fce7f3; color:#9d174d; }
+    .tag-ice   { background:#e0f2fe; color:#075985; }
+    .tag-addon { background:#ede9fe; color:#5b21b6; }
+    .tag-note  { background:#f3f4f6; color:#4b5563; font-style:italic; }
 
-    /* ── Form inputs ── */
-    .form-label {
-      display: block;
-      font-weight: 700;
-      font-size: 0.8rem;
-      color: #374151;
-      margin-bottom: 0.35rem;
-    }
+    /* ── Form ── */
+    .form-label { display:block; font-weight:700; font-size:0.8rem; color:#374151; margin-bottom:0.35rem; }
     .form-input {
-      width: 100%;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 12px;
-      padding: 0.7rem 0.95rem;
-      font-size: 0.875rem;
-      font-family: 'Inter', sans-serif;
-      outline: none;
-      background: #fafafa;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      width:100%; border:1.5px solid #e5e7eb; border-radius:12px;
+      padding:0.7rem 0.95rem 0.7rem 2.4rem;
+      font-size:0.875rem; font-family:'Inter',sans-serif; outline:none;
+      background:#fafafa; transition:border-color 0.2s, box-shadow 0.2s;
     }
-    .form-input:focus {
-      border-color: #d97706;
-      box-shadow: 0 0 0 3px rgba(217,119,6,0.1);
-      background: #fff;
+    .form-input:focus { border-color:#d97706; box-shadow:0 0 0 3px rgba(217,119,6,0.1); background:#fff; }
+    .input-wrap { position:relative; }
+    .input-icon { position:absolute; left:0.85rem; top:50%; transform:translateY(-50%); color:#9ca3af; font-size:0.82rem; pointer-events:none; transition:color 0.2s; }
+    .input-wrap:focus-within .input-icon { color:#d97706; }
+    .form-input-plain { padding-left:0.95rem; }
+
+    /* ── Logged-in banner ── */
+    #user-banner {
+      display:none;
+      background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+      border:1.5px solid #86efac;
+      border-radius:14px;
+      padding:0.75rem 1rem;
+      margin-bottom:1rem;
+      align-items:center;
+      gap:0.75rem;
+      font-size:0.82rem;
     }
+    #user-banner.show { display:flex; animation: fadeUp 0.4s ease both; }
+    #user-banner .avatar {
+      width:36px; height:36px; border-radius:50%;
+      background:linear-gradient(135deg,#3b2416,#d4a373);
+      display:flex; align-items:center; justify-content:center;
+      color:#fff; font-weight:900; font-size:0.9rem; flex-shrink:0;
+    }
+    #login-nudge {
+      display:none;
+      background:#fef3c7;
+      border:1.5px solid #fde68a;
+      border-radius:14px;
+      padding:0.75rem 1rem;
+      margin-bottom:1rem;
+      align-items:center;
+      gap:0.75rem;
+      font-size:0.82rem;
+    }
+    #login-nudge.show { display:flex; animation: fadeUp 0.4s ease both; }
 
     /* ── Payment cards ── */
     .pay-card {
-      border: 2px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 1rem 1.25rem;
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.2s;
-      background: #fff;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
+      border:2px solid #e5e7eb; border-radius:18px; padding:1rem 1.25rem;
+      cursor:pointer; display:flex; align-items:center; gap:1rem;
+      transition:border-color 0.2s, background 0.2s, transform 0.15s, box-shadow 0.2s;
+      background:#fff;
     }
-    .pay-card:hover { border-color: #d97706; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(180,83,9,0.1); }
-    .pay-card.active { border-color: #b45309; background: #fffbeb; box-shadow: 0 4px 20px rgba(180,83,9,0.15); }
-
-    .radio-dot {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      border: 2px solid #d1d5db;
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.2s;
-    }
-    .pay-card.active .radio-dot { border-color: #b45309; }
-    .radio-dot::after {
-      content: '';
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: transparent;
-      transition: background 0.2s;
-    }
-    .pay-card.active .radio-dot::after { background: #b45309; }
-
-    .pay-icon {
-      width: 46px; height: 46px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
-      flex-shrink: 0;
-    }
+    .pay-card:hover { border-color:#d97706; transform:translateY(-1px); box-shadow:0 4px 16px rgba(180,83,9,0.1); }
+    .pay-card.active { border-color:#b45309; background:#fffbeb; box-shadow:0 4px 20px rgba(180,83,9,0.15); }
+    .radio-dot { width:20px; height:20px; border-radius:50%; border:2px solid #d1d5db; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:border-color 0.2s; }
+    .pay-card.active .radio-dot { border-color:#b45309; }
+    .radio-dot::after { content:''; width:10px; height:10px; border-radius:50%; background:transparent; transition:background 0.2s; }
+    .pay-card.active .radio-dot::after { background:#b45309; }
+    .pay-icon { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0; }
 
     /* ── Upload ── */
     #upload-zone {
-      border: 2px dashed #d97706;
-      border-radius: 18px;
-      background: #fffbeb;
-      padding: 2rem 1.5rem;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.2s, border-color 0.2s;
+      border:2px dashed #d97706; border-radius:18px; background:#fffbeb;
+      padding:2rem 1.5rem; text-align:center; cursor:pointer;
+      transition:background 0.2s, border-color 0.2s;
     }
-    #upload-zone:hover { background: #fef3c7; border-color: #b45309; }
-    #upload-zone.uploaded { background: #f0fdf4; border-color: #16a34a; border-style: solid; }
+    #upload-zone:hover { background:#fef3c7; border-color:#b45309; }
+    #upload-zone.uploaded { background:#f0fdf4; border-color:#16a34a; border-style:solid; }
     #receipt-preview { display:none; max-width:100%; max-height:200px; object-fit:contain; border-radius:10px; margin:0.75rem auto 0; }
 
-    /* ── Summary card ── */
-    .summary-sticky { position: sticky; top: 82px; }
-    .sum-row { display: flex; justify-content: space-between; font-size: 0.875rem; margin-bottom: 0.5rem; }
-    .sum-row.total { font-size: 1.15rem; font-weight: 900; color: #92400e; margin-top: 0.5rem; padding-top: 0.75rem; border-top: 2px dashed #e5e7eb; }
-    .sum-label { color: #6b7280; }
-    .sum-val   { font-weight: 600; color: #374151; }
+    /* ── Summary ── */
+    .summary-sticky { position:sticky; top:82px; }
+    .sum-row { display:flex; justify-content:space-between; font-size:0.875rem; margin-bottom:0.5rem; }
+    .sum-row.total { font-size:1.15rem; font-weight:900; color:#92400e; margin-top:0.5rem; padding-top:0.75rem; border-top:2px dashed #e5e7eb; }
+    .sum-label { color:#6b7280; }
+    .sum-val   { font-weight:600; color:#374151; }
 
-    /* ── Place order btn ── */
+    /* ── Place btn ── */
     #place-btn {
-      width: 100%;
-      padding: 0.95rem;
-      border: none;
-      border-radius: 16px;
-      font-weight: 900;
-      font-size: 1rem;
-      cursor: pointer;
-      background: linear-gradient(90deg, #3b2416 0%, #8b5e3c 40%, #d4a373 70%, #8b5e3c 100%);
-      background-size: 200% auto;
-      color: #fff;
-      letter-spacing: 0.02em;
-      transition: transform 0.2s, box-shadow 0.2s;
+      width:100%; padding:0.95rem; border:none; border-radius:16px;
+      font-weight:900; font-size:1rem; cursor:pointer;
+      background:linear-gradient(90deg,#3b2416 0%,#8b5e3c 40%,#d4a373 70%,#8b5e3c 100%);
+      background-size:200% auto; color:#fff; letter-spacing:0.02em;
+      transition:transform 0.2s, box-shadow 0.2s;
     }
-    #place-btn:hover { animation: shimmer 1.5s linear infinite; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(59,36,22,0.3); }
-    #place-btn:active { transform: scale(0.97); }
-    #place-btn:disabled { background: #d1d5db; color: #9ca3af; cursor: not-allowed; transform: none; animation: none; box-shadow: none; }
+    #place-btn:hover { animation:shimmer 1.5s linear infinite; transform:translateY(-2px); box-shadow:0 8px 28px rgba(59,36,22,0.3); }
+    #place-btn:active { transform:scale(0.97); }
+    #place-btn:disabled { background:#d1d5db; color:#9ca3af; cursor:not-allowed; transform:none; animation:none; box-shadow:none; }
 
-    /* ── QR box ── */
-    .qr-wrap {
-      background: #fff;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 18px;
-      padding: 1.25rem;
-      text-align: center;
-    }
+    /* ── QR ── */
+    .qr-wrap { background:#fff; border:1.5px solid #e5e7eb; border-radius:18px; padding:1.25rem; text-align:center; }
 
     /* ── Success overlay ── */
-    #success-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      z-index: 999;
-      align-items: center; justify-content: center;
-      backdrop-filter: blur(6px);
-      padding: 1rem;
-    }
-    #success-overlay.open { display: flex; }
-    .success-box {
-      background: #fff;
-      border-radius: 28px;
-      padding: 2.5rem 2rem;
-      max-width: 400px;
-      width: 100%;
-      text-align: center;
-      box-shadow: 0 24px 64px rgba(59,36,22,0.3);
-      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
-    }
-    .success-icon {
-      width: 76px; height: 76px;
-      background: linear-gradient(135deg,#3b2416,#d4a373);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.25rem;
-      font-size: 2rem;
-      color: #fff;
-    }
+    #success-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:999; align-items:center; justify-content:center; backdrop-filter:blur(6px); padding:1rem; }
+    #success-overlay.open { display:flex; }
+    .success-box { background:#fff; border-radius:28px; padding:2.5rem 2rem; max-width:400px; width:100%; text-align:center; box-shadow:0 24px 64px rgba(59,36,22,0.3); animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .success-icon { width:76px; height:76px; background:linear-gradient(135deg,#3b2416,#d4a373); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 1.25rem; font-size:2rem; color:#fff; }
 
-    /* ── Divider ── */
-    .dashed-hr { border: none; border-top: 2px dashed #e5e7eb; margin: 1rem 0; }
+    .dashed-hr { border:none; border-top:2px dashed #e5e7eb; margin:1rem 0; }
+    #empty-state { text-align:center; padding:5rem 2rem; }
 
-    /* ── Empty ── */
-    #empty-state { text-align:center; padding: 5rem 2rem; }
-
-    @media (max-width: 768px) {
-      .summary-sticky { position: static; }
-    }
+    @media (max-width:768px) { .summary-sticky { position:static; } }
   </style>
 </head>
 <body>
@@ -266,7 +199,6 @@
   </div>
 </nav>
 
-<!-- MAIN -->
 <main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
   <!-- Empty state -->
@@ -280,7 +212,6 @@
   <!-- Checkout grid -->
   <div id="checkout-grid" class="grid lg:grid-cols-3 gap-5 lg:gap-6" style="display:none;">
 
-    <!-- LEFT COL -->
     <div class="lg:col-span-2 flex flex-col gap-5">
 
       <!-- 1. ORDER RECEIPT -->
@@ -297,8 +228,6 @@
           </div>
         </div>
         <div id="items-list"></div>
-
-        <!-- Totals inside receipt -->
         <div style="padding:1rem 1.25rem;background:#fafafa;border-top:1px solid #f0ebe4;">
           <div class="sum-row"><span class="sum-label">Subtotal</span><span class="sum-val" id="r-subtotal">₱0</span></div>
           <div class="sum-row"><span class="sum-label">Delivery Fee</span><span class="sum-val">₱49</span></div>
@@ -313,22 +242,55 @@
           <i class="fa-solid fa-location-dot"></i>
           <h3>Delivery Details</h3>
         </div>
-        <div style="padding:1.25rem;" class="grid sm:grid-cols-2 gap-4">
-          <div>
-            <label class="form-label">Full Name <span style="color:#ef4444;">*</span></label>
-            <input id="f-name" class="form-input" type="text" placeholder="Juan dela Cruz">
+        <div style="padding:1.25rem;">
+
+          <!-- Logged-in banner -->
+          <div id="user-banner">
+            <div class="avatar" id="user-avatar">J</div>
+            <div style="flex:1;">
+              <p style="font-weight:700;color:#15803d;margin:0;">Logged in as <span id="banner-name"></span></p>
+              <p style="color:#6b7280;margin:0;font-size:0.75rem;">Info pre-filled from your account. <a href="#" id="edit-info-link" style="color:#d97706;font-weight:600;">Edit</a> · <a href="#" id="logout-link" style="color:#ef4444;font-weight:600;">Logout</a></p>
+            </div>
           </div>
-          <div>
-            <label class="form-label">Phone Number <span style="color:#ef4444;">*</span></label>
-            <input id="f-phone" class="form-input" type="tel" placeholder="09XX XXX XXXX">
+
+          <!-- Login nudge for guests -->
+          <div id="login-nudge">
+            <i class="fa-solid fa-user-circle" style="color:#d97706;font-size:1.4rem;flex-shrink:0;"></i>
+            <div style="flex:1;">
+              <p style="font-weight:700;color:#374151;margin:0;">May account ka na?</p>
+              <p style="color:#6b7280;margin:0;font-size:0.75rem;"><a href="login.html?from=checkout.html" style="color:#d97706;font-weight:700;">Sign in</a> para auto-fill ang form na ito.</p>
+            </div>
           </div>
-          <div class="sm:col-span-2">
-            <label class="form-label">Delivery Address <span style="color:#ef4444;">*</span></label>
-            <input id="f-address" class="form-input" type="text" placeholder="House No., Street, Barangay, City">
-          </div>
-          <div class="sm:col-span-2">
-            <label class="form-label">Order Notes <span style="color:#9ca3af;font-weight:400;font-size:0.75rem;">(optional)</span></label>
-            <textarea id="f-notes" class="form-input" rows="2" style="resize:none;" placeholder="Landmarks, special instructions, etc."></textarea>
+
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="form-label">Full Name <span style="color:#ef4444;">*</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-user input-icon"></i>
+                <input id="f-name" class="form-input" type="text" placeholder="Juan dela Cruz">
+              </div>
+            </div>
+            <div>
+              <label class="form-label">Phone Number <span style="color:#ef4444;">*</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-phone input-icon"></i>
+                <input id="f-phone" class="form-input" type="tel" placeholder="09XX XXX XXXX">
+              </div>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="form-label">Delivery Address <span style="color:#ef4444;">*</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-location-dot input-icon"></i>
+                <input id="f-address" class="form-input" type="text" placeholder="House No., Street, Barangay, City">
+              </div>
+            </div>
+            <div class="sm:col-span-2">
+              <label class="form-label">Order Notes <span style="color:#9ca3af;font-weight:400;font-size:0.75rem;">(optional)</span></label>
+              <div class="input-wrap">
+                <i class="fa-solid fa-note-sticky input-icon" style="top:1.1rem;transform:none;"></i>
+                <textarea id="f-notes" class="form-input" rows="2" style="padding-left:2.4rem;resize:none;" placeholder="Landmarks, special instructions, etc."></textarea>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -341,12 +303,9 @@
         </div>
         <div style="padding:1.25rem;" class="flex flex-col gap-3">
 
-          <!-- Pay on Delivery -->
           <div class="pay-card active" id="pay-pod" onclick="selectPay('pod')">
             <div class="radio-dot"></div>
-            <div class="pay-icon bg-amber-100" style="color:#b45309;">
-              <i class="fa-solid fa-motorcycle"></i>
-            </div>
+            <div class="pay-icon bg-amber-100" style="color:#b45309;"><i class="fa-solid fa-motorcycle"></i></div>
             <div style="flex:1;">
               <p style="font-weight:900;font-size:0.9rem;color:#1f2937;margin:0;">Pay on Delivery</p>
               <p style="font-size:0.78rem;color:#6b7280;margin:0.15rem 0 0;">Bayad kapag dumating ang kape. Cash lang.</p>
@@ -354,12 +313,9 @@
             <span style="background:#dcfce7;color:#15803d;font-size:0.68rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:99px;white-space:nowrap;">No upfront</span>
           </div>
 
-          <!-- InstaPay -->
           <div class="pay-card" id="pay-ip" onclick="selectPay('instapay')">
             <div class="radio-dot"></div>
-            <div class="pay-icon" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;">
-              <i class="fa-solid fa-qrcode"></i>
-            </div>
+            <div class="pay-icon" style="background:linear-gradient(135deg,#0ea5e9,#2563eb);color:#fff;"><i class="fa-solid fa-qrcode"></i></div>
             <div style="flex:1;">
               <p style="font-weight:900;font-size:0.9rem;color:#1f2937;margin:0;">InstaPay / GCash / Maya</p>
               <p style="font-size:0.78rem;color:#6b7280;margin:0.15rem 0 0;">Scan QR, pay, then upload your receipt.</p>
@@ -371,17 +327,12 @@
           <div id="ip-panel" style="display:none;margin-top:0.5rem;">
             <div class="qr-wrap mb-4">
               <p style="font-size:0.7rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.75rem;">Scan to Pay</p>
-              <!-- QR Code SVG -->
               <div style="width:160px;height:160px;margin:0 auto 0.75rem;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:8px;">
                 <svg width="144" height="144" viewBox="0 0 144 144" xmlns="http://www.w3.org/2000/svg">
                   <rect width="144" height="144" fill="#fff"/>
-                  <!-- TL finder -->
                   <rect x="8" y="8" width="36" height="36" rx="5" fill="#1a1a1a"/><rect x="13" y="13" width="26" height="26" rx="3" fill="#fff"/><rect x="18" y="18" width="16" height="16" rx="2" fill="#1a1a1a"/>
-                  <!-- TR finder -->
                   <rect x="100" y="8" width="36" height="36" rx="5" fill="#1a1a1a"/><rect x="105" y="13" width="26" height="26" rx="3" fill="#fff"/><rect x="110" y="18" width="16" height="16" rx="2" fill="#1a1a1a"/>
-                  <!-- BL finder -->
                   <rect x="8" y="100" width="36" height="36" rx="5" fill="#1a1a1a"/><rect x="13" y="105" width="26" height="26" rx="3" fill="#fff"/><rect x="18" y="110" width="16" height="16" rx="2" fill="#1a1a1a"/>
-                  <!-- data dots -->
                   <rect x="52" y="8" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="64" y="8" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="76" y="8" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="88" y="8" width="8" height="8" rx="2" fill="#1a1a1a"/>
                   <rect x="52" y="20" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="76" y="20" width="8" height="8" rx="2" fill="#1a1a1a"/>
                   <rect x="64" y="32" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="88" y="32" width="8" height="8" rx="2" fill="#1a1a1a"/>
@@ -393,7 +344,6 @@
                   <rect x="52" y="100" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="76" y="100" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="100" y="100" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="128" y="100" width="8" height="8" rx="2" fill="#1a1a1a"/>
                   <rect x="52" y="112" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="88" y="112" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="112" y="112" width="8" height="8" rx="2" fill="#1a1a1a"/>
                   <rect x="64" y="128" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="76" y="128" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="100" y="128" width="8" height="8" rx="2" fill="#1a1a1a"/><rect x="128" y="128" width="8" height="8" rx="2" fill="#1a1a1a"/>
-                  <!-- Center logo -->
                   <rect x="58" y="58" width="28" height="28" rx="5" fill="#fff"/>
                   <rect x="60" y="60" width="24" height="24" rx="4" fill="#8b5e3c"/>
                   <text x="72" y="77" text-anchor="middle" font-family="Arial" font-size="9" font-weight="900" fill="#fff">KK</text>
@@ -402,8 +352,6 @@
               <p style="font-weight:900;color:#1f2937;margin:0;">Kapeng Kabado PH</p>
               <p style="font-size:0.82rem;color:#6b7280;margin:0.2rem 0 0;">GCash / Maya · <strong style="color:#b45309;">0917 XXX XXXX</strong></p>
             </div>
-
-            <!-- Upload -->
             <p class="form-label">Upload Payment Receipt <span style="color:#ef4444;">*</span></p>
             <div id="upload-zone" onclick="document.getElementById('receipt-input').click()">
               <input type="file" id="receipt-input" accept="image/*" style="display:none;" onchange="onReceiptUpload(this)">
@@ -426,14 +374,11 @@
 
     </div><!-- end left col -->
 
-    <!-- RIGHT COL — Summary -->
+    <!-- RIGHT COL -->
     <div class="lg:col-span-1">
       <div class="summary-sticky">
         <div class="section-card" style="animation-delay:0.2s;">
-          <div class="section-header">
-            <i class="fa-solid fa-receipt"></i>
-            <h3>Order Summary</h3>
-          </div>
+          <div class="section-header"><i class="fa-solid fa-receipt"></i><h3>Order Summary</h3></div>
           <div style="padding:1.25rem;">
             <div id="summary-items" class="flex flex-col gap-2 mb-3"></div>
             <hr class="dashed-hr">
@@ -453,9 +398,7 @@
             <button id="place-btn" onclick="placeOrder()">
               <i class="fa-solid fa-mug-hot" style="margin-right:0.4rem;"></i>Place Order
             </button>
-            <p style="text-align:center;font-size:0.72rem;color:#9ca3af;margin-top:0.6rem;">
-              By ordering, you agree to our Terms & Conditions.
-            </p>
+            <p style="text-align:center;font-size:0.72rem;color:#9ca3af;margin-top:0.6rem;">By ordering, you agree to our Terms &amp; Conditions.</p>
           </div>
         </div>
 
@@ -476,7 +419,7 @@
       </div>
     </div>
 
-  </div><!-- end grid -->
+  </div>
 </main>
 
 <!-- SUCCESS OVERLAY -->
@@ -484,7 +427,7 @@
   <div class="success-box">
     <div class="success-icon">☕</div>
     <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:#1f2937;margin:0 0 0.4rem;">Order Placed!</h2>
-    <p style="color:#6b7280;font-size:0.875rem;margin:0 0 1.25rem;">Salamat sa iyong tiwala, kabado! Ang kape mo ay papunta na sa'yo. ✨</p>
+    <p style="color:#6b7280;font-size:0.875rem;margin:0 0 1.25rem;">Salamat sa iyong tiwala, kabado! Papunta na sa'yo ang kape. ✨</p>
     <div style="background:#fef3c7;border-radius:14px;padding:0.9rem 1.1rem;text-align:left;margin-bottom:1.25rem;">
       <p style="font-size:0.7rem;color:#9ca3af;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin:0 0 0.2rem;">Order Number</p>
       <p id="success-order-no" style="font-size:1.3rem;font-weight:900;color:#92400e;margin:0;"></p>
@@ -496,58 +439,92 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer class="coffee-gradient" style="color:#fff;padding:2rem;text-align:center;margin-top:3rem;">
   <p style="font-weight:900;font-size:1.05rem;margin:0;">Kapeng Kabado</p>
   <p style="color:rgba(253,230,138,0.8);font-size:0.82rem;margin:0.3rem 0 0;">Di namin maaayos buhay mo pero may kape kami. ☕</p>
 </footer>
 
 <script>
-  // ── Constants ──────────────────────────────────────────────
-  const DELIVERY = 49;
-  const SERVICE  = 10;
+  const DELIVERY = 49, SERVICE = 10;
+  const SESSION_KEY = 'kk_session';
 
-  const ADDON_LABELS = {
-    whip:'Extra Whipped Cream', shot:'Extra Espresso Shot', oat:'Oat Milk Upgrade',
-    syrup:'Flavored Syrup', pearls:'Tapioca Pearls', jelly:'Coffee Jelly',
-    cream:'Cheese Cream Topping', drizzle:'Caramel Drizzle'
-  };
+  const ADDON_LABELS = { whip:'Extra Whipped Cream', shot:'Extra Espresso Shot', oat:'Oat Milk Upgrade', syrup:'Flavored Syrup', pearls:'Tapioca Pearls', jelly:'Coffee Jelly', cream:'Cheese Cream Topping', drizzle:'Caramel Drizzle' };
   const SUGAR_LABELS = { '0':'No Sugar','25':'25% Sugar','50':'50% Sugar','75':'75% Sugar','100':'Full Sugar' };
   const ICE_LABELS   = { no:'No Ice', less:'Less Ice', regular:'Regular Ice', extra:'Extra Ice' };
 
-  // ── State ──────────────────────────────────────────────────
   let cart = [];
   let payMethod = 'pod';
   let receiptReady = false;
   const orderNo = 'KK-' + (Math.floor(Math.random() * 90000) + 10000);
 
-  // ── Load cart ──────────────────────────────────────────────
   function loadCart() {
     try { cart = JSON.parse(localStorage.getItem('kk_cart')) || []; }
     catch(e) { cart = []; }
   }
-
   function subtotal()   { return cart.reduce((s,i) => s + i.linePrice * i.qty, 0); }
   function grandTotal() { return subtotal() + DELIVERY + SERVICE; }
 
-  // ── Render order items (receipt) ───────────────────────────
+  // ── Session / auto-fill ─────────────────────────────────────
+  function loadSession() {
+    try { return JSON.parse(localStorage.getItem(SESSION_KEY)) || null; }
+    catch(e) { return null; }
+  }
+
+  function applySession(sess) {
+    if (!sess || !sess.loggedIn) {
+      document.getElementById('login-nudge').classList.add('show');
+      return;
+    }
+    const fullName = sess.firstName + ' ' + sess.lastName;
+    document.getElementById('f-name').value    = fullName;
+    document.getElementById('f-phone').value   = sess.phone || '';
+    document.getElementById('f-address').value = sess.address || '';
+
+    const banner = document.getElementById('user-banner');
+    banner.classList.add('show');
+    document.getElementById('banner-name').textContent = fullName;
+    document.getElementById('user-avatar').textContent  = sess.firstName.charAt(0).toUpperCase();
+
+    // Edit info → opens account edit modal (simple prompt fallback)
+    document.getElementById('edit-info-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      const newPhone   = prompt('Update phone number:', sess.phone || '');
+      const newAddress = prompt('Update delivery address:', sess.address || '');
+      if (newPhone   !== null) { sess.phone   = newPhone;   document.getElementById('f-phone').value   = newPhone; }
+      if (newAddress !== null) { sess.address = newAddress; document.getElementById('f-address').value = newAddress; }
+      // Save back to session and user list
+      localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
+      const users = JSON.parse(localStorage.getItem('kk_users') || '[]');
+      const idx = users.findIndex(u => u.email === sess.email);
+      if (idx >= 0) {
+        users[idx].phone   = sess.phone;
+        users[idx].address = sess.address;
+        localStorage.setItem('kk_users', JSON.stringify(users));
+      }
+    });
+
+    // Logout
+    document.getElementById('logout-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem(SESSION_KEY);
+      window.location.reload();
+    });
+  }
+
+  // ── Render receipt items ────────────────────────────────────
   function renderItems() {
     const el = document.getElementById('items-list');
     if (!el) return;
-
     el.innerHTML = cart.map((item, idx) => {
-      const size    = item.size ? (item.size.charAt(0).toUpperCase() + item.size.slice(1)) : 'Regular';
-      const sugar   = item.sugar !== undefined ? SUGAR_LABELS[item.sugar] || item.sugar : null;
-      const ice     = item.ice   ? ICE_LABELS[item.ice]   || item.ice   : null;
-      const addons  = (item.addons || []).map(a => ADDON_LABELS[a] || a);
-
+      const size   = item.size ? (item.size.charAt(0).toUpperCase() + item.size.slice(1)) : 'Regular';
+      const sugar  = item.sugar !== undefined ? SUGAR_LABELS[item.sugar] || item.sugar : null;
+      const ice    = item.ice   ? ICE_LABELS[item.ice]   || item.ice   : null;
+      const addons = (item.addons || []).map(a => ADDON_LABELS[a] || a);
       const addonTags = addons.map(a => `<span class="tag tag-addon">+${a}</span>`).join('');
       const noteTag   = item.notes ? `<span class="tag tag-note"><i class="fa-solid fa-note-sticky" style="margin-right:2px;"></i>${item.notes}</span>` : '';
-
       return `
         <div class="order-item" style="animation-delay:${idx*50}ms;">
-          <img src="${item.image}" alt="${item.name}"
-               onerror="this.src='https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=200&auto=format&fit=crop'">
+          <img src="${item.image}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=200&auto=format&fit=crop'">
           <div style="flex:1;min-width:0;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:0.5rem;">
               <div style="min-width:0;">
@@ -559,87 +536,61 @@
                 <p class="item-unit-price">₱${item.linePrice} × ${item.qty}</p>
               </div>
             </div>
-            <div style="margin-top:0.4rem;display:flex;flex-wrap:wrap;gap:0;">
+            <div style="margin-top:0.4rem;display:flex;flex-wrap:wrap;">
               <span class="tag tag-size">${size}</span>
               ${sugar ? `<span class="tag tag-sugar">${sugar}</span>` : ''}
               ${ice   ? `<span class="tag tag-ice">${ice}</span>` : ''}
-              ${addonTags}
-              ${noteTag}
+              ${addonTags}${noteTag}
             </div>
           </div>
         </div>`;
     }).join('');
-
-    // Totals in receipt
     document.getElementById('r-subtotal').textContent = '₱' + subtotal().toLocaleString();
-    document.getElementById('r-total').textContent     = '₱' + grandTotal().toLocaleString();
+    document.getElementById('r-total').textContent    = '₱' + grandTotal().toLocaleString();
   }
 
-  // ── Render summary sidebar ─────────────────────────────────
   function renderSummary() {
     const el = document.getElementById('summary-items');
-    if (el) {
-      el.innerHTML = cart.map(i => `
-        <div style="display:flex;justify-content:space-between;font-size:0.82rem;gap:0.5rem;">
-          <span style="color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${i.name} <span style="color:#9ca3af;">×${i.qty}</span></span>
-          <span style="font-weight:700;color:#374151;white-space:nowrap;">₱${(i.linePrice*i.qty).toLocaleString()}</span>
-        </div>`).join('');
-    }
+    if (el) el.innerHTML = cart.map(i => `
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;gap:0.5rem;">
+        <span style="color:#6b7280;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">${i.name} <span style="color:#9ca3af;">×${i.qty}</span></span>
+        <span style="font-weight:700;color:#374151;white-space:nowrap;">₱${(i.linePrice*i.qty).toLocaleString()}</span>
+      </div>`).join('');
     document.getElementById('s-subtotal').textContent = '₱' + subtotal().toLocaleString();
     document.getElementById('s-total').textContent    = grandTotal().toLocaleString();
   }
 
-  // ── Payment selection ──────────────────────────────────────
+  // ── Payment ─────────────────────────────────────────────────
   function selectPay(method) {
     payMethod = method;
-
     document.getElementById('pay-pod').classList.toggle('active', method === 'pod');
     document.getElementById('pay-ip').classList.toggle('active',  method === 'instapay');
     document.getElementById('ip-panel').style.display = method === 'instapay' ? 'block' : 'none';
-
     const badge = document.getElementById('pay-badge');
     if (method === 'instapay') {
       badge.style.background = '#eff6ff';
-      badge.innerHTML = `
-        <i class="fa-solid fa-qrcode" style="color:#2563eb;width:16px;text-align:center;"></i>
-        <div>
-          <p style="font-weight:700;color:#374151;margin:0;">InstaPay / GCash / Maya</p>
-          <p style="color:#9ca3af;margin:0;font-size:0.72rem;">Upload receipt after payment</p>
-        </div>`;
+      badge.innerHTML = `<i class="fa-solid fa-qrcode" style="color:#2563eb;width:16px;text-align:center;"></i><div><p style="font-weight:700;color:#374151;margin:0;">InstaPay / GCash / Maya</p><p style="color:#9ca3af;margin:0;font-size:0.72rem;">Upload receipt after payment</p></div>`;
     } else {
       badge.style.background = '#fef3c7';
-      badge.innerHTML = `
-        <i class="fa-solid fa-motorcycle" style="color:#b45309;width:16px;text-align:center;"></i>
-        <div>
-          <p style="font-weight:700;color:#374151;margin:0;">Pay on Delivery</p>
-          <p style="color:#9ca3af;margin:0;font-size:0.72rem;">Cash on hand kapag delivery</p>
-        </div>`;
+      badge.innerHTML = `<i class="fa-solid fa-motorcycle" style="color:#b45309;width:16px;text-align:center;"></i><div><p style="font-weight:700;color:#374151;margin:0;">Pay on Delivery</p><p style="color:#9ca3af;margin:0;font-size:0.72rem;">Cash on hand kapag delivery</p></div>`;
     }
     checkBtn();
   }
 
-  // ── Receipt upload ─────────────────────────────────────────
   function onReceiptUpload(input) {
     const file = input.files[0];
     if (!file) return;
     receiptReady = true;
-
     document.getElementById('upload-zone').classList.add('uploaded');
     document.getElementById('upload-idle').style.display = 'none';
     document.getElementById('upload-done').style.display = 'block';
     document.getElementById('upload-name').textContent   = file.name;
-
     const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('receipt-preview');
-      prev.src = e.target.result;
-      prev.style.display = 'block';
-    };
+    reader.onload = e => { const p = document.getElementById('receipt-preview'); p.src = e.target.result; p.style.display = 'block'; };
     reader.readAsDataURL(file);
     checkBtn();
   }
 
-  // ── Button state ───────────────────────────────────────────
   function checkBtn() {
     const btn = document.getElementById('place-btn');
     if (!btn) return;
@@ -652,7 +603,7 @@
     }
   }
 
-  // ── Place order ────────────────────────────────────────────
+  // ── Place order ─────────────────────────────────────────────
   function placeOrder() {
     const name    = document.getElementById('f-name').value.trim();
     const phone   = document.getElementById('f-phone').value.trim();
@@ -661,31 +612,22 @@
     if (!name)    { highlight('f-name',    'Pakisulat ang iyong pangalan!'); return; }
     if (!phone)   { highlight('f-phone',   'Pakisulat ang iyong numero!');   return; }
     if (!address) { highlight('f-address', 'Pakisulat ang iyong address!');  return; }
-    if (payMethod === 'instapay' && !receiptReady) {
-      alert('I-upload muna ang iyong InstaPay receipt!'); return;
-    }
+    if (payMethod === 'instapay' && !receiptReady) { alert('I-upload muna ang iyong InstaPay receipt!'); return; }
 
-    // Save to orders
     const orders = JSON.parse(localStorage.getItem('kk_orders') || '[]');
     orders.unshift({
-      id:        orderNo,
-      customer:  name,
-      phone,
-      address,
-      notes:     document.getElementById('f-notes').value.trim(),
-      items:     cart.map(i => `${i.name} (${i.customLabel || i.size || 'Regular'}) ×${i.qty}`).join(' | '),
-      itemsRaw:  cart,
-      total:     grandTotal(),
-      payment:   payMethod === 'instapay' ? 'InstaPay' : 'Pay on Delivery',
-      status:    'Pending',
-      date:      new Date().toLocaleDateString('en-PH', { year:'numeric', month:'long', day:'numeric' })
+      id: orderNo, customer: name, phone, address,
+      notes:    document.getElementById('f-notes').value.trim(),
+      items:    cart.map(i => `${i.name} (${i.customLabel || i.size || 'Regular'}) ×${i.qty}`).join(' | '),
+      itemsRaw: cart,
+      total:    grandTotal(),
+      payment:  payMethod === 'instapay' ? 'InstaPay' : 'Pay on Delivery',
+      status:   'Pending',
+      date:     new Date().toLocaleDateString('en-PH', { year:'numeric', month:'long', day:'numeric' })
     });
     localStorage.setItem('kk_orders', JSON.stringify(orders));
-
-    // Clear cart
     localStorage.removeItem('kk_cart');
 
-    // Show success
     document.getElementById('success-order-no').textContent = orderNo;
     document.getElementById('order-no-display').textContent = orderNo;
     document.getElementById('success-overlay').classList.add('open');
@@ -694,13 +636,9 @@
   function highlight(id, msg) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.style.borderColor = '#ef4444';
-    el.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.15)';
-    el.placeholder = msg;
-    el.focus();
-    el.addEventListener('input', () => {
-      el.style.borderColor = ''; el.style.boxShadow = '';
-    }, { once: true });
+    el.style.borderColor = '#ef4444'; el.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.15)';
+    el.placeholder = msg; el.focus();
+    el.addEventListener('input', () => { el.style.borderColor = ''; el.style.boxShadow = ''; }, { once: true });
   }
 
   function closeSuccess() {
@@ -708,7 +646,7 @@
     window.location.href = 'index.html';
   }
 
-  // ── Init ───────────────────────────────────────────────────
+  // ── Init ────────────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
     loadCart();
     if (!cart.length) {
@@ -721,6 +659,7 @@
       renderItems();
       renderSummary();
       checkBtn();
+      applySession(loadSession());
     }
   });
 </script>
