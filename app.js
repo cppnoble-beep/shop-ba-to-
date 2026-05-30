@@ -24,17 +24,17 @@ const PRODUCTS = [
 
 // ── Add-ons ───────────────────────────────────────────────────
 const ADDONS = [
-  { id: 'whip',       label: 'Extra Whipped Cream', fee: 20 },
-  { id: 'shot',       label: 'Extra Espresso Shot',  fee: 35 },
-  { id: 'oat',        label: 'Oat Milk Upgrade',     fee: 30 },
-  { id: 'syrup',      label: 'Flavored Syrup',        fee: 25 },
-  { id: 'pearls',     label: 'Tapioca Pearls',        fee: 30 },
-  { id: 'jelly',      label: 'Coffee Jelly',          fee: 25 },
-  { id: 'cream',      label: 'Cheese Cream Topping',  fee: 40 },
-  { id: 'drizzle',    label: 'Caramel Drizzle',       fee: 15 },
+  { id: 'whip',    label: 'Extra Whipped Cream', fee: 20 },
+  { id: 'shot',    label: 'Extra Espresso Shot',  fee: 35 },
+  { id: 'oat',     label: 'Oat Milk Upgrade',     fee: 30 },
+  { id: 'syrup',   label: 'Flavored Syrup',        fee: 25 },
+  { id: 'pearls',  label: 'Tapioca Pearls',        fee: 30 },
+  { id: 'jelly',   label: 'Coffee Jelly',          fee: 25 },
+  { id: 'cream',   label: 'Cheese Cream Topping',  fee: 40 },
+  { id: 'drizzle', label: 'Caramel Drizzle',       fee: 15 },
 ];
 
-// ── Size pricing (multiplier offsets in PHP) ──────────────────
+// ── Size pricing offsets ──────────────────────────────────────
 const SIZE_OFFSETS = { small: 0, medium: 30, large: 55 };
 
 // ── State ─────────────────────────────────────────────────────
@@ -42,13 +42,12 @@ let cart = JSON.parse(localStorage.getItem('kk_cart')) || [];
 let selectedCategory = 'All';
 let searchQuery = '';
 
-// Order form state
-let orderProduct   = null;
-let orderQty       = 1;
-let orderSize      = 'small';
-let orderAddons    = new Set();
-let orderSugar     = '0';
-let orderIce       = 'no';
+let orderProduct = null;
+let orderQty     = 1;
+let orderSize    = 'small';
+let orderAddons  = new Set();
+let orderSugar   = '0';
+let orderIce     = 'no';
 
 // ── Helpers ───────────────────────────────────────────────────
 const saveCart  = () => localStorage.setItem('kk_cart', JSON.stringify(cart));
@@ -115,14 +114,12 @@ function renderProducts() {
       </div>`;
   }).join('');
 
-  // Attach events — "Add" opens order form
   grid.querySelectorAll('.add-btn').forEach(btn =>
     btn.addEventListener('click', () => openOrderForm(+btn.dataset.id)));
   grid.querySelectorAll('.qty-btn').forEach(btn =>
     btn.addEventListener('click', () =>
       btn.dataset.action === 'inc' ? increaseQty(+btn.dataset.id) : decreaseQty(+btn.dataset.id)));
 
-  // Card reveal
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
@@ -157,7 +154,6 @@ function openOrderForm(id) {
   orderSugar   = '0';
   orderIce     = 'no';
 
-  // Populate header
   document.getElementById('order-product-name').textContent    = product.name;
   document.getElementById('order-product-tagline').textContent = product.tagline;
 
@@ -166,20 +162,16 @@ function openOrderForm(id) {
     class="w-full h-full object-cover"
     onerror="this.src='https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=200&auto=format&fit=crop'">`;
 
-  // Size prices
   document.getElementById('price-small').textContent  = `₱${product.price}`;
   document.getElementById('price-medium').textContent = `₱${product.price + SIZE_OFFSETS.medium}`;
   document.getElementById('price-large').textContent  = `₱${product.price + SIZE_OFFSETS.large}`;
 
-  // Reset size radio
   document.querySelectorAll('input[name="size"]').forEach(r => r.checked = r.value === 'small');
   document.querySelectorAll('.size-card').forEach(c =>
     c.classList.toggle('border-amber-600', c.dataset.size === 'small'));
 
-  // Qty
   document.getElementById('order-qty').textContent = '1';
 
-  // Add-ons
   const addonList = document.getElementById('addons-list');
   addonList.innerHTML = ADDONS.map(a => `
     <label class="addon-check" data-addon="${a.id}">
@@ -197,16 +189,13 @@ function openOrderForm(id) {
     });
   });
 
-  // Sugar reset
   document.querySelectorAll('.sugar-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.sugar === '0');
   });
-  // Ice reset
   document.querySelectorAll('.ice-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.ice === 'no');
   });
 
-  // Notes
   const notes = document.getElementById('order-notes');
   if (notes) notes.value = '';
 
@@ -220,19 +209,16 @@ function closeOrderForm() {
 
 function confirmOrder() {
   if (!orderProduct) return;
-  const existing = getItem(orderProduct.id);
   const linePrice = orderProduct.price + SIZE_OFFSETS[orderSize] +
     [...orderAddons].reduce((s, id) => {
       const a = ADDONS.find(x => x.id === id);
       return s + (a ? a.fee : 0);
     }, 0);
 
-  // Build label for cart
   const sizeLabel   = orderSize.charAt(0).toUpperCase() + orderSize.slice(1);
   const addonLabels = [...orderAddons].map(id => ADDONS.find(x => x.id === id)?.label).filter(Boolean);
   const customLabel = [sizeLabel, ...addonLabels].join(', ');
 
-  // Always push as a new line if customization differs
   const cartEntry = {
     ...orderProduct,
     cartKey:    `${orderProduct.id}-${orderSize}-${[...orderAddons].sort().join('-')}`,
@@ -256,7 +242,6 @@ function confirmOrder() {
   saveCart(); renderCart(); refreshBtnArea(orderProduct.id);
   closeOrderForm();
 
-  // Tiny success nudge
   const cartBtn = document.getElementById('open-cart');
   if (cartBtn) {
     cartBtn.style.transform = 'scale(1.15)';
@@ -318,7 +303,7 @@ function renderCart() {
     btn.addEventListener('click', () => increaseByKey(btn.dataset.cartkey)));
 }
 
-// ── Cart actions (by cartKey for custom items) ────────────────
+// ── Cart actions ──────────────────────────────────────────────
 function increaseByKey(key) {
   const item = cart.find(i => i.cartKey === key);
   if (item) { item.qty++; saveCart(); renderCart(); }
@@ -331,12 +316,7 @@ function decreaseByKey(key) {
   saveCart(); renderCart();
 }
 
-// Legacy helpers (used for btn-area refresh on product grid)
-function addToCart(id) {
-  openOrderForm(id);
-}
 function increaseQty(id) {
-  // Find any matching base entry for this product
   const items = cart.filter(i => i.id === id);
   if (items.length) { items[0].qty++; saveCart(); renderCart(); refreshBtnArea(id); }
   else openOrderForm(id);
@@ -374,21 +354,11 @@ function refreshBtnArea(id) {
   }
 }
 
-// ── Checkout ──────────────────────────────────────────────────
+// ── Checkout — redirect to checkout page (cart stays in localStorage) ──
 function checkout() {
-  if (!cart.length) { alert('Walang laman ang cart mo! Mag-order muna.'); return; }
-  const orders = JSON.parse(localStorage.getItem('kk_orders')) || [];
-  orders.unshift({
-    id: 'ORD-' + (Math.floor(Math.random() * 90000) + 10000),
-    customer: 'Guest',
-    items: cart.map(i => `${i.name} (${i.customLabel || 'Regular'}) x${i.qty}`).join(', '),
-    total: cartTotal(),
-    status: 'Pending',
-    date: new Date().toLocaleDateString('en-PH')
-  });
-  localStorage.setItem('kk_orders', JSON.stringify(orders));
-  cart = []; saveCart(); renderCart(); renderProducts(); closeCart();
-  alert('Order placed! Salamat sa iyong tiwala, kabado! ☕');
+  if (!cart.length) { alert('Walang laman ang cart mo! Mag-order muna. ☕'); return; }
+  closeCart();
+  window.location.href = 'checkout.html';
 }
 
 // ── Cart modal ────────────────────────────────────────────────
@@ -468,9 +438,9 @@ function initSearchSuggestions() {
     if (list.style.display === 'none') return;
     const items = list.querySelectorAll('li');
     let activeIdx = [...items].findIndex(li => li.classList.contains('active'));
-    if (e.key === 'ArrowDown')      { e.preventDefault(); activeIdx = (activeIdx + 1) % items.length; }
-    else if (e.key === 'ArrowUp')   { e.preventDefault(); activeIdx = (activeIdx - 1 + items.length) % items.length; }
-    else if (e.key === 'Enter')     { e.preventDefault(); if (activeIdx >= 0) items[activeIdx]?.click(); return; }
+    if (e.key === 'ArrowDown')    { e.preventDefault(); activeIdx = (activeIdx + 1) % items.length; }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); activeIdx = (activeIdx - 1 + items.length) % items.length; }
+    else if (e.key === 'Enter')   { e.preventDefault(); if (activeIdx >= 0) items[activeIdx]?.click(); return; }
     else return;
     items.forEach(li => li.classList.remove('active'));
     items[activeIdx]?.classList.add('active');
@@ -484,11 +454,9 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCart();
   initSearchSuggestions();
 
-  // Category buttons
   document.querySelectorAll('.cat-btn').forEach(btn =>
     btn.addEventListener('click', () => setCategory(btn.dataset.cat)));
 
-  // Cart modal
   document.getElementById('open-cart')?.addEventListener('click', openCart);
   document.getElementById('close-cart')?.addEventListener('click', closeCart);
   document.getElementById('cart-overlay')?.addEventListener('click', e => {
@@ -496,7 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   document.getElementById('checkout-btn')?.addEventListener('click', checkout);
 
-  // Order form: size
   document.querySelectorAll('input[name="size"]').forEach(radio => {
     radio.addEventListener('change', () => {
       orderSize = radio.value;
@@ -506,7 +473,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Order form: qty
   document.getElementById('qty-dec')?.addEventListener('click', () => {
     if (orderQty > 1) { orderQty--; document.getElementById('order-qty').textContent = orderQty; updateOrderTotal(); }
   });
@@ -514,7 +480,6 @@ document.addEventListener('DOMContentLoaded', () => {
     orderQty++; document.getElementById('order-qty').textContent = orderQty; updateOrderTotal();
   });
 
-  // Order form: sugar
   document.querySelectorAll('.sugar-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       orderSugar = btn.dataset.sugar;
@@ -523,7 +488,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Order form: ice
   document.querySelectorAll('.ice-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       orderIce = btn.dataset.ice;
@@ -532,21 +496,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Order form: close & confirm
   document.getElementById('close-order')?.addEventListener('click', closeOrderForm);
   document.getElementById('order-overlay')?.addEventListener('click', e => {
     if (e.target === document.getElementById('order-overlay')) closeOrderForm();
   });
   document.getElementById('confirm-order-btn')?.addEventListener('click', confirmOrder);
 
-  // Hamburger
   const ham  = document.getElementById('hamburger');
   const menu = document.getElementById('mobile-menu');
   ham?.addEventListener('click', () => {
     ham.classList.toggle('open');
     menu.classList.toggle('open');
   });
-  // Close mobile menu when a link is clicked
   menu?.querySelectorAll('a').forEach(a => {
     a.addEventListener('click', () => {
       ham.classList.remove('open');
@@ -554,13 +515,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Navbar scroll shrink
   const nav = document.getElementById('main-nav');
   window.addEventListener('scroll', () => {
     nav?.classList.toggle('nav-scrolled', window.scrollY > 50);
   }, { passive: true });
 
-  // Back to top
   const btt = document.getElementById('back-to-top');
   if (btt) {
     window.addEventListener('scroll', () =>
