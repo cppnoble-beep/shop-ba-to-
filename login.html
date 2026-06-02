@@ -695,14 +695,16 @@
 
   const USERS_KEY   = 'kk_users';
   const SESSION_KEY = 'kk_session';
+  const ADMIN_EMAIL  = 'admin@kapengkabado.com';
+  const ADMIN_PASS   = 'kapengkabadoph';
 
   function getUsers() {
     try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
     catch(e) { return []; }
   }
   function saveUsers(users) { localStorage.setItem(USERS_KEY, JSON.stringify(users)); }
-  function setSession(user) {
-    const sess = { email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone, address: user.address, loggedIn: true };
+  function setSession(user, isAdmin = false) {
+    const sess = { email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone, address: user.address, loggedIn: true, isAdmin: !!isAdmin };
     localStorage.setItem(SESSION_KEY, JSON.stringify(sess));
   }
   function getSession() {
@@ -832,6 +834,18 @@
       btn.classList.remove('loading');
       document.getElementById('login-spinner').style.display = 'none';
 
+      // Admin shortcut: if credentials match admin constants, redirect to admin dashboard
+      if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASS) {
+        if (remember) { localStorage.setItem('kk_remember', '1'); }
+        else { localStorage.removeItem('kk_remember'); }
+
+        const adminUser = { email: ADMIN_EMAIL, firstName: 'Admin', lastName: 'KapengKabado', phone: '', address: '' };
+        setSession(adminUser, true);
+        showSuccessState('Admin', ADMIN_EMAIL);
+        setTimeout(() => { window.location.href = 'admin.html'; }, 700);
+        return;
+      }
+
       const users = getUsers();
       const user  = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
@@ -865,6 +879,9 @@
     const email     = document.getElementById('reg-email').value.trim();
     const password  = document.getElementById('reg-password').value;
     const confirm   = document.getElementById('reg-confirm').value;
+
+    // Prevent creating the built-in admin account via signup
+    if (email.toLowerCase() === ADMIN_EMAIL) { fieldError('reg-email'); showAlert('Cannot register this email.'); return; }
 
     if (!firstName) { fieldError('reg-firstname'); showAlert('Ilagay ang iyong first name.'); return; }
     if (!lastName)  { fieldError('reg-lastname');  showAlert('Ilagay ang iyong last name.'); return; }

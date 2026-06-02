@@ -82,8 +82,8 @@ function updateNavUser() {
       </div>`;
   } else {
     navUserEl.innerHTML = `
-      <a href="login.html" style="display:flex;align-items:center;gap:0.4rem;background:#fef3c7;color:#92400e;padding:0.4rem 0.85rem;border-radius:12px;font-weight:700;font-size:0.8rem;text-decoration:none;transition:background 0.2s;" onmouseover="this.style.background='#fde68a'" onmouseout="this.style.background='#fef3c7'">
-        <i class="fa-solid fa-user" style="font-size:0.75rem;"></i>
+      <a href="login.html" class="nav-action-btn" style="background:#fef3c7;color:#92400e;text-decoration:none;" onmouseover="this.style.background='#fde68a'" onmouseout="this.style.background='#fef3c7'">
+        <i class="fa-solid fa-user" style="font-size:0.9rem;"></i>
         <span>Sign In</span>
       </a>`;
   }

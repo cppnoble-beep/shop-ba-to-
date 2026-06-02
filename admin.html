@@ -19,104 +19,7 @@
 </head>
 <body x-data="adminApp()">
 
-<div x-show="!loggedIn" class="min-h-screen flex items-center justify-center p-6">
-  <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden grid lg:grid-cols-2 max-w-6xl w-full">
-
-    <div class="sidebar-gradient text-white p-14 flex flex-col justify-center relative overflow-hidden">
-      <div class="absolute top-0 right-0 text-[250px] opacity-10 font-black"><img class="logo" src="assets/kapeng-kabado-logo.png" alt="logo"></div>
-
-      <div class="relative z-10">
-        <h1 class="text-6xl font-black leading-tight">
-          Kapeng Kabado
-          Admin
-        </h1>
-
-        <p class="mt-6 text-amber-100 text-lg">
-          Premium Coffee Shop Management System.
-        </p>
-
-        <div class="mt-10 space-y-5">
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-              📦
-            </div>
-            <div>
-              <h3 class="font-bold text-xl">Orders Management</h3>
-              <p class="text-amber-100 text-sm">Track and manage deliveries</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-              📈
-            </div>
-            <div>
-              <h3 class="font-bold text-xl">Sales Analytics</h3>
-              <p class="text-amber-100 text-sm">View revenue and performance</p>
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-              🔒
-            </div>
-            <div>
-              <h3 class="font-bold text-xl">Secure Authentication</h3>
-              <p class="text-amber-100 text-sm">Protected admin access</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="p-14 flex flex-col justify-center">
-      <div>
-        <span class="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-bold">
-          ADMIN LOGIN
-        </span>
-
-        <h2 class="text-5xl font-black mt-6">
-          Welcome Back
-        </h2>
-
-        <p class="mt-4 text-gray-500 text-lg">
-          Login to manage your coffee business.
-        </p>
-      </div>
-
-      <div class="mt-10 space-y-6">
-        <div>
-          <label class="font-bold text-gray-700">Email Address</label>
-          <input
-            x-model="email"
-            type="email"
-            placeholder="Enter admin email"
-            class="w-full mt-3 border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-amber-200"
-          >
-        </div>
-
-        <div>
-          <label class="font-bold text-gray-700">Password</label>
-          <input
-            x-model="password"
-            type="password"
-            placeholder="Enter password"
-            class="w-full mt-3 border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:ring-4 focus:ring-amber-200"
-          >
-        </div>
-
-        <button
-          @click="login()"
-          class="w-full bg-amber-700 text-white py-5 rounded-2xl text-xl font-black shadow-xl hover:bg-amber-800 transition"
-        >
-          Login Dashboard
-        </button>
-
-        
-      </div>
-    </div>
-  </div>
-</div>
+<!-- Admin login removed: admin access enforced via session check -->
 
 <div x-show="loggedIn" class="flex min-h-screen">
 
@@ -233,29 +136,32 @@
 <script type="text/plain" id="admin-template"></script>
 <script>
 function adminApp() {
+  const SESSION_KEY = 'kk_session';
+
   return {
-    email: '',
-    password: '',
     loggedIn: false,
 
     orders: JSON.parse(localStorage.getItem('orders')) || [],
 
-    login() {
-      if(this.email === 'admin@kapengkabado.com' && this.password === 'kapengkabadoph') {
-        this.loggedIn = true;
-        localStorage.setItem('adminLoggedIn', true);
-      } else {
-        alert('Invalid admin credentials');
-      }
-    },
-
     logout() {
       this.loggedIn = false;
-      localStorage.removeItem('adminLoggedIn');
+      localStorage.removeItem(SESSION_KEY);
+      // redirect back to public login
+      window.location.href = 'login.html';
     },
 
     init() {
-      this.loggedIn = localStorage.getItem('adminLoggedIn') === 'true';
+      try {
+        const sess = JSON.parse(localStorage.getItem(SESSION_KEY));
+        if (sess && sess.loggedIn && sess.isAdmin) {
+          this.loggedIn = true;
+          return;
+        }
+      } catch(e) {
+        // ignore parse errors
+      }
+      // Not an admin — redirect to public login and request admin redirect back
+      window.location.href = 'login.html?from=admin.html';
     }
   }
 }

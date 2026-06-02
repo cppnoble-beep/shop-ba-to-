@@ -127,6 +127,22 @@ body {
 }
 .nav-cart:active { transform: scale(0.95); }
 
+/* Shared navbar action button (cart, sign-in) */
+.nav-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 0.75rem;
+  height: 40px;
+  min-width: 56px;
+  line-height: 1;
+  transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.nav-action-btn i { display: inline-block; width: 1rem; text-align: center; }
+
 /* ── Hamburger ── */
 .ham-line {
   display: block;
