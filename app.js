@@ -70,21 +70,51 @@ function updateNavUser() {
 
   if (sess && sess.loggedIn) {
     navUserEl.innerHTML = `
-      <div style="display:flex;align-items:center;gap:0.5rem;">
-        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3b2416,#d4a373);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:0.8rem;flex-shrink:0;">
+      <div class="account-wrap" style="display:flex;align-items:center;gap:0.5rem;">
+        <button id="account-btn" aria-haspopup="true" aria-expanded="false" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#3b2416,#d4a373);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:0.8rem;flex-shrink:0;border:none;cursor:pointer;">
           ${sess.firstName.charAt(0).toUpperCase()}
-        </div>
+        </button>
         <div class="hidden sm:block" style="line-height:1.2;">
           <p style="font-weight:700;font-size:0.78rem;color:#374151;margin:0;">Hi, ${sess.firstName}!</p>
-          <button onclick="doNavLogout()" style="background:none;border:none;font-size:0.68rem;color:#ef4444;font-weight:600;cursor:pointer;padding:0;font-family:inherit;">Logout</button>
+          <button id="desktop-logout" style="background:none;border:none;font-size:0.68rem;color:#ef4444;font-weight:600;cursor:pointer;padding:0;font-family:inherit;">Logout</button>
         </div>
-        <button onclick="doNavLogout()" class="sm:hidden" style="background:none;border:none;font-size:0.68rem;color:#ef4444;font-weight:600;cursor:pointer;padding:0.2rem 0.4rem;font-family:inherit;border:1px solid #fecaca;border-radius:6px;">Logout</button>
+        <div id="account-menu" class="account-menu" style="display:none;">
+          <button id="menu-logout">Logout</button>
+        </div>
       </div>`;
+
+    const accountBtn = navUserEl.querySelector('#account-btn');
+    const menuLogout = navUserEl.querySelector('#menu-logout');
+    const desktopLogout = navUserEl.querySelector('#desktop-logout');
+    const accountMenu = navUserEl.querySelector('#account-menu');
+    accountBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = accountMenu.classList.toggle('open');
+      accountMenu.style.display = open ? 'block' : 'none';
+      accountBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    menuLogout?.addEventListener('click', () => { doNavLogout(); accountMenu.style.display = 'none'; });
+    desktopLogout?.addEventListener('click', () => { doNavLogout(); });
+    if (!window.__kk_account_click_listener) {
+      window.__kk_account_click_listener = true;
+      document.addEventListener('click', (ev) => {
+        const wrap = document.getElementById('nav-user-area');
+        if (!wrap) return;
+        const menu = wrap.querySelector('#account-menu');
+        const btn = wrap.querySelector('#account-btn');
+        if (!menu || !btn) return;
+        if (!wrap.contains(ev.target)) {
+          menu.classList.remove('open');
+          menu.style.display = 'none';
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
   } else {
     navUserEl.innerHTML = `
       <a href="login.html" class="nav-action-btn" style="background:#fef3c7;color:#92400e;text-decoration:none;" onmouseover="this.style.background='#fde68a'" onmouseout="this.style.background='#fef3c7'">
         <i class="fa-solid fa-user" style="font-size:0.9rem;"></i>
-        <span>Sign In</span>
+        <span class="hidden sm:inline" style="margin-left:0.4rem;">Sign In</span>
       </a>`;
   }
 }

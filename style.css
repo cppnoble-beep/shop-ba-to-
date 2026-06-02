@@ -575,3 +575,55 @@ body {
   border-radius: 99px; margin-left: auto;
 }
 .suggestion-highlight { color: #b45309; font-weight: 600; }
+
+/* NAVBAR USER AREA - prevent overflow on small screens */
+#nav-user-area {
+  min-width: 0;           /* allow shrinking inside flex */
+  flex-shrink: 1 !important;
+  display: flex;
+  align-items: center;
+}
+#nav-user-area p {
+  max-width: 120px;      /* keep greeting from stretching header */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+}
+#nav-user-area button {
+  flex-shrink: 0;        /* keep buttons compact */
+}
+@media (max-width: 640px) {
+  /* ensure the desktop greeting is hidden on small screens (mirrors Tailwind's hidden sm:block) */
+  #nav-user-area .hidden { display: none !important; }
+  /* tighten the max width on very small screens */
+  #nav-user-area { max-width: 110px; }
+}
+
+/* Account dropdown menu (mobile) */
+.account-wrap { position: relative; }
+.account-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  z-index: 80;
+  min-width: 120px;
+}
+.account-menu button {
+  background: none;
+  border: none;
+  color: #ef4444;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 6px;
+  width: 100%;
+  text-align: left;
+}
+.account-menu button:hover { background: #fff5f5; color: #c2410c; }
+.account-menu.open { display: block; }
