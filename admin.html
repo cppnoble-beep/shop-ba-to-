@@ -3,170 +3,1177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kapeng Kabado Admin Dashboard</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<title>Kapeng Kabado — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <style>
-    body {
-    background: #f5f1eb;
-    font-family: Inter, sans-serif;
-    }
-    .sidebar-gradient {
-    background: linear-gradient(180deg,#2b1709,#5c3b24,#8b5e3c);
-    }
-    </style>
-</head>
-<body x-data="adminApp()">
-
-<!-- Admin login removed: admin access enforced via session check -->
-
-<div x-show="loggedIn" class="flex min-h-screen">
-
-  <aside class="w-80 sidebar-gradient text-white p-8 hidden lg:block">
-    <div class="flex items-center gap-4 mb-14">
-      <div class="w-16 h-17 rounded-3xl bg-white/20 flex items-center justify-center text-3xl">
-        <img src="assets/kapeng-kabado-logo.png" alt="logo">
-      </div>
-
-      <div>
-        <h1 class="text-3xl font-black">Kapeng Kabado</h1>
-        <p class="text-amber-100">Admin Dashboard</p>
-      </div>
-    </div>
-
-    <nav class="space-y-3">
-      <a href="#" class="flex items-center gap-4 bg-white/10 px-5 py-4 rounded-2xl font-bold">
-        <i class="fa-solid fa-chart-line"></i>
-        Dashboard
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-box"></i>
-        Products
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-cart-shopping"></i>
-        Orders
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-users"></i>
-        Customers
-      </a>
-
-      <a href="#" class="flex items-center gap-4 hover:bg-white/10 px-5 py-4 rounded-2xl font-bold transition">
-        <i class="fa-solid fa-credit-card"></i>
-        Payments
-      </a>
-    </nav>
-  </aside>
-
-  <main class="flex-1 p-8">
-    <div class="flex items-center justify-between mb-10">
-      <div>
-        <h1 class="text-5xl font-black">Coffee Analytics</h1>
-        <p class="text-gray-500 mt-3">Manage your coffee business system.</p>
-      </div>
-
-      <button
-        @click="logout()"
-        class="bg-red-500 text-white px-6 py-3 rounded-2xl font-bold hover:bg-red-600"
-      >
-        Logout
-      </button>
-    </div>
-
-    <div class="grid md:grid-cols-4 gap-6 mb-10">
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Revenue</p>
-        <h2 class="text-5xl font-black mt-3">₱82K</h2>
-      </div>
-
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Orders</p>
-        <h2 class="text-5xl font-black mt-3">524</h2>
-      </div>
-
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Customers</p>
-        <h2 class="text-5xl font-black mt-3">1.2K</h2>
-      </div>
-
-      <div class="bg-white rounded-3xl p-7 shadow-xl">
-        <p class="text-gray-500">Products</p>
-        <h2 class="text-5xl font-black mt-3">150</h2>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-[40px] shadow-2xl overflow-hidden">
-      <div class="p-8 border-b">
-        <h2 class="text-3xl font-black">Latest Orders</h2>
-      </div>
-
-      <table class="w-full">
-        <thead class="bg-amber-700 text-white">
-          <tr>
-            <th class="p-5 text-left">Order ID</th>
-            <th class="p-5 text-left">Customer</th>
-            <th class="p-5 text-left">Product</th>
-            <th class="p-5 text-left">Status</th>
-            <th class="p-5 text-left">Price</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <template x-for="order in orders">
-            <tr class="border-b hover:bg-gray-50">
-              <td class="p-5" x-text="order.id"></td>
-              <td class="p-5" x-text="order.customer"></td>
-              <td class="p-5" x-text="order.item"></td>
-              <td class="p-5">
-                <span class="bg-green-100 text-green-700 px-4 py-2 rounded-full text-xs font-bold" x-text="order.status"></span>
-              </td>
-              <td class="p-5">₱<span x-text="order.price"></span></td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
-    </div>
-  </main>
-</div>
-<script type="text/plain" id="admin-template"></script>
-<script>
-function adminApp() {
-  const SESSION_KEY = 'kk_session';
-
-  return {
-    loggedIn: false,
-
-    orders: JSON.parse(localStorage.getItem('orders')) || [],
-
-    logout() {
-      this.loggedIn = false;
-      localStorage.removeItem(SESSION_KEY);
-      // redirect back to public login
-      window.location.href = 'login.html';
-    },
-
-    init() {
-      try {
-        const sess = JSON.parse(localStorage.getItem(SESSION_KEY));
-        if (sess && sess.loggedIn && sess.isAdmin) {
-          this.loggedIn = true;
-          return;
-        }
-      } catch(e) {
-        // ignore parse errors
-      }
-      // Not an admin — redirect to public login and request admin redirect back
-      window.location.href = 'login.html?from=admin.html';
-    }
+<style>
+  :root {
+    --brown-900: #1c0e06;
+    --brown-800: #2b1709;
+    --brown-700: #4a2510;
+    --brown-600: #6b3a1e;
+    --brown-500: #8b5e3c;
+    --brown-400: #b07d56;
+    --brown-300: #d4a373;
+    --brown-200: #e8c9a8;
+    --brown-100: #f5e6d3;
+    --brown-50:  #faf5ef;
+    --cream: #f8f3ed;
+    --white: #ffffff;
+    --green: #16a34a;
+    --green-bg: #dcfce7;
+    --yellow: #d97706;
+    --yellow-bg: #fef3c7;
+    --red: #dc2626;
+    --red-bg: #fee2e2;
+    --blue: #2563eb;
+    --blue-bg: #dbeafe;
+    --gray-500: #6b7280;
+    --gray-400: #9ca3af;
+    --sidebar-w: 260px;
+    --header-h: 68px;
   }
-}
-</script>
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--brown-900);
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-height: 100vh;
+    background: linear-gradient(175deg, var(--brown-900) 0%, var(--brown-800) 45%, var(--brown-700) 100%);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    z-index: 100;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.2);
+  }
+
+  .sidebar-logo {
+    padding: 1.5rem 1.5rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sidebar-logo .brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .sidebar-logo .sub {
+    font-size: 0.72rem;
+    color: var(--brown-300);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--brown-500), var(--brown-300));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+  }
+  .logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .nav-section {
+    padding: 1rem 0.85rem;
+    flex: 1;
+  }
+  .nav-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: var(--brown-400);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0 0.65rem;
+    margin-bottom: 0.4rem;
+    margin-top: 0.75rem;
+  }
+  .nav-label:first-child { margin-top: 0; }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: 10px;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    margin-bottom: 2px;
+    position: relative;
+  }
+  .nav-item i { width: 18px; text-align: center; font-size: 0.85rem; }
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-item.active { background: linear-gradient(135deg, var(--brown-600), var(--brown-500)); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .nav-item .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 99px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  .sidebar-footer {
+    padding: 1rem 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  .admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 0.5rem;
+  }
+  .admin-avatar {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--brown-500), var(--brown-300));
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.85rem; color: #fff;
+    flex-shrink: 0;
+  }
+  .admin-name { font-size: 0.8rem; font-weight: 600; color: #fff; }
+  .admin-role { font-size: 0.68rem; color: var(--brown-300); }
+  .logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
+    padding: 0.6rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid rgba(220,38,38,0.3);
+    background: rgba(220,38,38,0.08);
+    color: #fca5a5;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .logout-btn:hover { background: rgba(220,38,38,0.2); color: #fff; }
+
+  /* ── Main content ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  .topbar {
+    height: var(--header-h);
+    background: var(--white);
+    border-bottom: 1px solid var(--brown-100);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .topbar-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; }
+  .topbar-right { display: flex; align-items: center; gap: 1rem; }
+  .topbar-date { font-size: 0.8rem; color: var(--gray-500); }
+  .topbar-badge {
+    background: var(--brown-100);
+    color: var(--brown-700);
+    padding: 0.3rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  .page-content {
+    padding: 1.75rem 2rem;
+    flex: 1;
+  }
+
+  /* ── Pages ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Stat cards ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.1rem;
+    margin-bottom: 1.75rem;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.25rem 1.4rem;
+    box-shadow: 0 1px 8px rgba(59,36,22,0.07);
+    border: 1px solid var(--brown-100);
+    position: relative;
+    overflow: hidden;
+  }
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .stat-card.revenue::before  { background: linear-gradient(90deg, #3b2416, #d4a373); }
+  .stat-card.orders::before   { background: linear-gradient(90deg, #2563eb, #7c3aed); }
+  .stat-card.customers::before{ background: linear-gradient(90deg, #16a34a, #059669); }
+  .stat-card.products::before { background: linear-gradient(90deg, #d97706, #f59e0b); }
+
+  .stat-label { font-size: 0.75rem; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.06em; }
+  .stat-value { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; margin: 0.25rem 0 0; color: var(--brown-900); }
+  .stat-sub { font-size: 0.72rem; color: var(--gray-400); margin-top: 0.2rem; }
+  .stat-icon {
+    position: absolute;
+    top: 1rem; right: 1.1rem;
+    font-size: 1.5rem;
+    opacity: 0.12;
+  }
+
+  /* ── Section header ── */
+  .section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.1rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
+  .section-action {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--brown-500);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0.35rem 0.85rem;
+    border-radius: 8px;
+    transition: background 0.15s;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .section-action:hover { background: var(--brown-100); }
+
+  /* ── Table ── */
+  .table-wrap {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 1px 8px rgba(59,36,22,0.07);
+    border: 1px solid var(--brown-100);
+    overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; }
+  thead { background: linear-gradient(135deg, var(--brown-900), var(--brown-700)); }
+  th {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  td {
+    padding: 0.85rem 1rem;
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--brown-50);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--brown-50); }
+
+  /* ── Status badges ── */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.2rem 0.65rem;
+    border-radius: 99px;
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .badge-pending  { background: #fef3c7; color: #92400e; }
+  .badge-preparing{ background: #dbeafe; color: #1e40af; }
+  .badge-delivered{ background: #dcfce7; color: #15803d; }
+  .badge-cancelled{ background: #fee2e2; color: #991b1b; }
+
+  /* ── Payment badge ── */
+  .pay-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.72rem; font-weight: 600;
+    padding: 0.15rem 0.55rem; border-radius: 8px;
+  }
+  .pay-pod  { background: #fef3c7; color: #92400e; }
+  .pay-ip   { background: #dbeafe; color: #1e40af; }
+
+  /* ── Order detail drawer ── */
+  .drawer-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: flex-end;
+  }
+  .drawer-overlay.open { display: flex; }
+  .drawer {
+    width: 420px;
+    max-width: 95vw;
+    height: 100vh;
+    background: #fff;
+    overflow-y: auto;
+    box-shadow: -8px 0 40px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes slideIn {
+    from { transform: translateX(40px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+  }
+  .drawer-head {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, var(--brown-900), var(--brown-700));
+    color: #fff;
+    display: flex; align-items: flex-start; justify-content: space-between;
+  }
+  .drawer-head h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 900; }
+  .drawer-head p  { font-size: 0.75rem; color: var(--brown-300); margin-top: 2px; }
+  .drawer-close {
+    background: rgba(255,255,255,0.15); border: none; color: #fff;
+    width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+    font-size: 0.9rem; display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s; flex-shrink: 0;
+  }
+  .drawer-close:hover { background: rgba(255,255,255,0.3); }
+  .drawer-body { padding: 1.25rem 1.5rem; flex: 1; }
+
+  .detail-section { margin-bottom: 1.25rem; }
+  .detail-section h4 {
+    font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--gray-400);
+    margin-bottom: 0.6rem; padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--brown-100);
+  }
+  .detail-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    font-size: 0.82rem; gap: 0.5rem; margin-bottom: 0.45rem;
+  }
+  .detail-row .label { color: var(--gray-500); flex-shrink: 0; }
+  .detail-row .val   { font-weight: 600; text-align: right; }
+
+  .order-item-row {
+    display: flex; align-items: center; gap: 0.65rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed var(--brown-100);
+    font-size: 0.8rem;
+  }
+  .order-item-row:last-child { border-bottom: none; }
+  .order-item-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--brown-300); flex-shrink: 0;
+  }
+
+  .status-select {
+    width: 100%;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid var(--brown-200);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--white);
+    transition: border-color 0.2s;
+    margin-top: 0.4rem;
+  }
+  .status-select:focus { outline: none; border-color: var(--brown-500); }
+
+  .update-btn {
+    width: 100%; padding: 0.75rem;
+    background: linear-gradient(135deg, var(--brown-800), var(--brown-600));
+    color: #fff; border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-weight: 700;
+    font-size: 0.875rem; cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    margin-top: 0.75rem;
+  }
+  .update-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,36,22,0.3); }
+
+  /* ── Products page ── */
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .product-item {
+    background: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--brown-100);
+    box-shadow: 0 1px 6px rgba(59,36,22,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .product-item:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(59,36,22,0.12); }
+  .product-item img {
+    width: 100%; height: 130px; object-fit: cover; display: block;
+    background: var(--brown-100);
+  }
+  .product-item-body { padding: 0.75rem; }
+  .product-item-name { font-weight: 700; font-size: 0.82rem; color: var(--brown-900); line-height: 1.3; }
+  .product-item-price { font-weight: 900; font-size: 0.95rem; color: var(--brown-600); margin-top: 0.2rem; }
+  .product-item-cat {
+    font-size: 0.65rem; font-weight: 700; padding: 0.15rem 0.5rem;
+    border-radius: 99px; margin-top: 0.35rem; display: inline-block;
+  }
+  .cat-hot     { background: #fee2e2; color: #991b1b; }
+  .cat-cold    { background: #dbeafe; color: #1e40af; }
+  .cat-frappe  { background: #ede9fe; color: #5b21b6; }
+  .cat-special { background: #dcfce7; color: #15803d; }
+
+  /* ── Customers page ── */
+  .customer-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--brown-600), var(--brown-300));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.8rem; color: #fff; flex-shrink: 0;
+  }
+
+  /* ── Payments page ── */
+  .total-box {
+    background: linear-gradient(135deg, var(--brown-900), var(--brown-700));
+    border-radius: 16px; padding: 1.5rem; color: #fff;
+    margin-bottom: 1.25rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .total-box .amt { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 900; }
+  .total-box .lbl { font-size: 0.78rem; color: var(--brown-300); }
+
+  /* ── Empty state ── */
+  .empty-state {
+    padding: 3.5rem 2rem; text-align: center;
+    color: var(--gray-400);
+  }
+  .empty-state i { font-size: 2.5rem; opacity: 0.3; display: block; margin-bottom: 0.75rem; }
+  .empty-state p { font-size: 0.9rem; }
+
+  /* ── Search/filter bar ── */
+  .filter-bar {
+    display: flex; gap: 0.75rem; margin-bottom: 1.1rem;
+    flex-wrap: wrap; align-items: center;
+  }
+  .filter-input {
+    flex: 1; min-width: 180px;
+    padding: 0.55rem 0.9rem 0.55rem 2.2rem;
+    border: 1.5px solid var(--brown-200);
+    border-radius: 10px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; background: var(--white);
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .filter-input:focus { outline: none; border-color: var(--brown-500); }
+  .filter-wrap { position: relative; flex: 1; min-width: 180px; }
+  .filter-wrap i { position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--gray-400); font-size: 0.8rem; pointer-events: none; }
+  .filter-select {
+    padding: 0.55rem 0.9rem;
+    border: 1.5px solid var(--brown-200);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; background: var(--white);
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .filter-select:focus { outline: none; border-color: var(--brown-500); }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    background: var(--brown-900); color: #fff;
+    padding: 0.75rem 1.25rem; border-radius: 12px;
+    font-size: 0.82rem; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 999; display: none;
+    align-items: center; gap: 0.5rem;
+    animation: fadeUp 0.3s ease;
+  }
+  #toast.show { display: flex; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--brown-200); border-radius: 3px; }
+
+  .order-no { font-family: 'DM Mono', monospace; font-weight: 700; font-size: 0.8rem; color: var(--brown-700); }
+
+  .recent-only-note {
+    font-size: 0.75rem; color: var(--gray-400);
+    font-style: italic;
+  }
+
+  @media (max-width: 900px) {
+    :root { --sidebar-w: 220px; }
+    .stats-row { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon"><img src="assets/kapeng-kabado-logo.png" alt="Kapeng Kabado logo featuring a stylized coffee bean with text brewing happiness & jitters premium blends your jittery fix est 2024"
+      ></div>
+    <div class="brand">Kapeng Kabado</div>
+    <div class="sub">Admin Panel</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <button class="nav-item active" onclick="showPage('dashboard', this)">
+      <i class="fa-solid fa-chart-line"></i> Dashboard
+    </button>
+    <button class="nav-item" onclick="showPage('orders', this)">
+      <i class="fa-solid fa-receipt"></i> All Orders
+      <span class="nav-badge" id="pending-count">0</span>
+    </button>
+
+    <div class="nav-label">Catalog</div>
+    <button class="nav-item" onclick="showPage('products', this)">
+      <i class="fa-solid fa-box-open"></i> Products
+    </button>
+
+    <div class="nav-label">People</div>
+    <button class="nav-item" onclick="showPage('customers', this)">
+      <i class="fa-solid fa-users"></i> Customers
+    </button>
+
+    <div class="nav-label">Finance</div>
+    <button class="nav-item" onclick="showPage('payments', this)">
+      <i class="fa-solid fa-peso-sign"></i> Payments
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="admin-profile">
+      <div class="admin-avatar">A</div>
+      <div>
+        <div class="admin-name">Admin</div>
+        <div class="admin-role">Account Administrator</div>
+      </div>
+    </div>
+    <button class="logout-btn" onclick="logout()">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+    </button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="page-title">Dashboard</div>
+    <div class="topbar-right">
+      <span class="topbar-date" id="today-date"></span>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <!-- ═══ DASHBOARD PAGE ═══ -->
+    <div class="page active" id="page-dashboard">
+
+      <div class="stats-row">
+        <div class="stat-card revenue">
+          <i class="fa-solid fa-peso-sign stat-icon"></i>
+          <div class="stat-label">Total Revenue</div>
+          <div class="stat-value" id="stat-revenue">₱0</div>
+          <div class="stat-sub">from all orders</div>
+        </div>
+        <div class="stat-card orders">
+          <i class="fa-solid fa-receipt stat-icon"></i>
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="stat-orders">0</div>
+          <div class="stat-sub"><span id="stat-pending">0</span> pending</div>
+        </div>
+        <div class="stat-card customers">
+          <i class="fa-solid fa-users stat-icon"></i>
+          <div class="stat-label">Customers</div>
+          <div class="stat-value" id="stat-customers">0</div>
+          <div class="stat-sub">unique accounts</div>
+        </div>
+        <div class="stat-card products">
+          <i class="fa-solid fa-box-open stat-icon"></i>
+          <div class="stat-label">Products</div>
+          <div class="stat-value" id="stat-products">0</div>
+          <div class="stat-sub">in catalog</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <div class="section-title">Recent Orders</div>
+          <div class="recent-only-note">Showing latest 10 orders</div>
+        </div>
+        <button class="section-action" onclick="showPage('orders', document.querySelector('.nav-item:nth-child(2)'))">
+          <i class="fa-solid fa-arrow-right"></i> View All
+        </button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order No.</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="recent-orders-body">
+            <tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders yet.</p></div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ ALL ORDERS PAGE ═══ -->
+    <div class="page" id="page-orders">
+      <div class="filter-bar">
+        <div class="filter-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input class="filter-input" id="order-search" placeholder="Search by order no, customer…" oninput="renderAllOrders()">
+        </div>
+        <select class="filter-select" id="order-status-filter" onchange="renderAllOrders()">
+          <option value="">All Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Preparing">Preparing</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <select class="filter-select" id="order-pay-filter" onchange="renderAllOrders()">
+          <option value="">All Payments</option>
+          <option value="Pay on Delivery">Pay on Delivery</option>
+          <option value="InstaPay">InstaPay</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order No.</th>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Payment</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="all-orders-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PRODUCTS PAGE ═══ -->
+    <div class="page" id="page-products">
+      <div class="section-head">
+        <div class="section-title">Product Catalog</div>
+        <span style="font-size:0.78rem;color:var(--gray-400);" id="product-count-label">0 products</span>
+      </div>
+      <div class="products-grid" id="products-grid"></div>
+    </div>
+
+    <!-- ═══ CUSTOMERS PAGE ═══ -->
+    <div class="page" id="page-customers">
+      <div class="filter-bar">
+        <div class="filter-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input class="filter-input" id="cust-search" placeholder="Search customers…" oninput="renderCustomers()">
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Phone</th>
+              <th>Address</th>
+              <th>Total Orders</th>
+              <th>Total Spent</th>
+            </tr>
+          </thead>
+          <tbody id="customers-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PAYMENTS PAGE ═══ -->
+    <div class="page" id="page-payments">
+      <div class="total-box">
+        <div>
+          <div class="lbl">Total Confirmed Revenue</div>
+          <div class="amt" id="pay-total">₱0</div>
+        </div>
+        <i class="fa-solid fa-peso-sign" style="font-size:3rem;opacity:0.15;"></i>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div class="stat-card">
+          <div class="stat-label">Pay on Delivery</div>
+          <div class="stat-value" id="pay-pod-total">₱0</div>
+          <div class="stat-sub" id="pay-pod-count">0 orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">InstaPay / GCash</div>
+          <div class="stat-value" id="pay-ip-total">₱0</div>
+          <div class="stat-sub" id="pay-ip-count">0 orders</div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div class="section-title">All Transactions</div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order No.</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Method</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="payments-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- page-content -->
+</div><!-- main -->
+
+<!-- ORDER DETAIL DRAWER -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer(event)">
+  <div class="drawer" id="drawer">
+    <div class="drawer-head">
+      <div>
+        <h3 id="drawer-order-no">Order Details</h3>
+        <p id="drawer-date"></p>
+      </div>
+      <button class="drawer-close" onclick="closeDrawerDirect()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="drawer-body" id="drawer-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"><i class="fa-solid fa-check-circle" style="color:#4ade80;"></i><span id="toast-msg"></span></div>
+
+<script>
+  const SESSION_KEY = 'kk_session';
+  const ORDERS_KEY  = 'kk_orders';
+  const USERS_KEY   = 'kk_users';
+
+  // ── Auth check ──────────────────────────────────────────────
+  (function() {
+    try {
+      const sess = JSON.parse(localStorage.getItem(SESSION_KEY));
+      if (sess && sess.loggedIn && sess.isAdmin) return;
+    } catch(e) {}
+    window.location.href = 'login.html?from=admin.html';
+  })();
+
+  // ── Helpers ──────────────────────────────────────────────────
+  function getOrders() {
+    try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
+    catch(e) { return []; }
+  }
+  function saveOrders(orders) {
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+  }
+  function getUsers() {
+    try { return JSON.parse(localStorage.getItem(USERS_KEY)) || []; }
+    catch(e) { return []; }
+  }
+  function fmtPeso(n) {
+    return '₱' + Number(n || 0).toLocaleString('en-PH');
+  }
+  function badgeHTML(status) {
+    const map = { Pending:'badge-pending', Preparing:'badge-preparing', Delivered:'badge-delivered', Cancelled:'badge-cancelled' };
+    const dot = { Pending:'🟡', Preparing:'🔵', Delivered:'🟢', Cancelled:'🔴' };
+    return `<span class="badge ${map[status]||'badge-pending'}">${dot[status]||'⚪'} ${status||'Pending'}</span>`;
+  }
+  function payBadge(method) {
+    if (!method) return '';
+    if (method === 'InstaPay') return `<span class="pay-badge pay-ip"><i class="fa-solid fa-qrcode"></i> InstaPay</span>`;
+    return `<span class="pay-badge pay-pod"><i class="fa-solid fa-motorcycle"></i> COD</span>`;
+  }
+  function itemCount(order) {
+    if (order.itemsRaw && order.itemsRaw.length) {
+      return order.itemsRaw.reduce((s,i) => s + (i.qty||1), 0) + ' item(s)';
+    }
+    if (order.items) return order.items.split('|').length + ' item(s)';
+    return '—';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ── Nav ─────────────────────────────────────────────────────
+  let currentPage = 'dashboard';
+  const PAGE_TITLES = { dashboard:'Dashboard', orders:'All Orders', products:'Products', customers:'Customers', payments:'Payments' };
+
+  function showPage(name, btn) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('page-title').textContent = PAGE_TITLES[name] || name;
+    currentPage = name;
+    if (name === 'dashboard')  renderDashboard();
+    if (name === 'orders')     renderAllOrders();
+    if (name === 'products')   renderProducts();
+    if (name === 'customers')  renderCustomers();
+    if (name === 'payments')   renderPayments();
+  }
+
+  // ── Date ────────────────────────────────────────────────────
+  document.getElementById('today-date').textContent = new Date().toLocaleDateString('en-PH', { weekday:'short', year:'numeric', month:'short', day:'numeric' });
+
+  // ── Dashboard ───────────────────────────────────────────────
+  function renderDashboard() {
+    const orders = getOrders();
+    const users  = getUsers();
+
+    // Stats
+    const revenue = orders.filter(o => o.status !== 'Cancelled').reduce((s,o) => s + (o.total || 0), 0);
+    const pending = orders.filter(o => o.status === 'Pending' || !o.status).length;
+    document.getElementById('stat-revenue').textContent  = fmtPeso(revenue);
+    document.getElementById('stat-orders').textContent   = orders.length;
+    document.getElementById('stat-pending').textContent  = pending;
+    document.getElementById('stat-customers').textContent= users.length;
+    document.getElementById('pending-count').textContent = pending;
+
+    // Count products from app.js catalog
+    const products = getProductCatalog();
+    document.getElementById('stat-products').textContent = products.length;
+
+    // Recent orders (latest 10)
+    const recent = orders.slice(0, 10);
+    const tbody = document.getElementById('recent-orders-body');
+    if (!recent.length) {
+      tbody.innerHTML = `<tr><td colspan="8"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders yet. Orders from checkout.html appear here.</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = recent.map((o, idx) => `
+      <tr>
+        <td><span class="order-no">${o.id || '—'}</span></td>
+        <td><strong style="font-size:0.82rem;">${o.customer || '—'}</strong></td>
+        <td style="color:var(--gray-500);">${itemCount(o)}</td>
+        <td><strong>${fmtPeso(o.total)}</strong></td>
+        <td>${payBadge(o.payment)}</td>
+        <td>${badgeHTML(o.status)}</td>
+        <td style="color:var(--gray-400);font-size:0.78rem;white-space:nowrap;">${o.date || '—'}</td>
+        <td><button onclick="openDrawer(${idx})" style="background:var(--brown-100);border:none;padding:0.3rem 0.65rem;border-radius:8px;cursor:pointer;font-size:0.72rem;font-weight:700;color:var(--brown-700);transition:background 0.15s;" onmouseover="this.style.background='var(--brown-200)'" onmouseout="this.style.background='var(--brown-100)'">View</button></td>
+      </tr>`).join('');
+  }
+
+  // ── All Orders ───────────────────────────────────────────────
+  function renderAllOrders() {
+    const orders = getOrders();
+    const search = (document.getElementById('order-search')?.value || '').toLowerCase();
+    const statusF = document.getElementById('order-status-filter')?.value || '';
+    const payF    = document.getElementById('order-pay-filter')?.value || '';
+
+    let filtered = orders.filter(o => {
+      const matchSearch = !search || (o.id||'').toLowerCase().includes(search) || (o.customer||'').toLowerCase().includes(search);
+      const matchStatus = !statusF || (o.status||'Pending') === statusF;
+      const matchPay    = !payF    || (o.payment||'') === payF;
+      return matchSearch && matchStatus && matchPay;
+    });
+
+    const tbody = document.getElementById('all-orders-body');
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="9"><div class="empty-state"><i class="fa-solid fa-receipt"></i><p>No orders found.</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map((o) => {
+      const idx = orders.indexOf(o);
+      return `<tr>
+        <td><span class="order-no">${o.id || '—'}</span></td>
+        <td><strong style="font-size:0.82rem;">${o.customer || '—'}</strong></td>
+        <td style="color:var(--gray-500);font-size:0.8rem;">${o.phone || '—'}</td>
+        <td style="color:var(--gray-500);">${itemCount(o)}</td>
+        <td><strong>${fmtPeso(o.total)}</strong></td>
+        <td>${payBadge(o.payment)}</td>
+        <td>${badgeHTML(o.status)}</td>
+        <td style="color:var(--gray-400);font-size:0.78rem;white-space:nowrap;">${o.date || '—'}</td>
+        <td><button onclick="openDrawer(${idx})" style="background:var(--brown-100);border:none;padding:0.3rem 0.65rem;border-radius:8px;cursor:pointer;font-size:0.72rem;font-weight:700;color:var(--brown-700);transition:background 0.15s;" onmouseover="this.style.background='var(--brown-200)'" onmouseout="this.style.background='var(--brown-100)'">View</button></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // ── Order Drawer ─────────────────────────────────────────────
+  let currentOrderIdx = null;
+  function openDrawer(idx) {
+    currentOrderIdx = idx;
+    const orders = getOrders();
+    const o = orders[idx];
+    if (!o) return;
+
+    document.getElementById('drawer-order-no').textContent = o.id || 'Order Details';
+    document.getElementById('drawer-date').textContent     = o.date || '';
+
+    // Build items list
+    let itemsHTML = '';
+    if (o.itemsRaw && o.itemsRaw.length) {
+      itemsHTML = o.itemsRaw.map(i => `
+        <div class="order-item-row">
+          <div class="order-item-dot"></div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:0.82rem;">${i.name}</div>
+            <div style="font-size:0.72rem;color:var(--gray-400);">${i.size||'Regular'} · qty ${i.qty||1}</div>
+          </div>
+          <div style="font-weight:700;font-size:0.82rem;color:var(--brown-700);">${fmtPeso((i.linePrice||0)*(i.qty||1))}</div>
+        </div>`).join('');
+    } else if (o.items) {
+      itemsHTML = o.items.split('|').map(s => `
+        <div class="order-item-row">
+          <div class="order-item-dot"></div>
+          <div style="flex:1;font-size:0.82rem;">${s.trim()}</div>
+        </div>`).join('');
+    } else {
+      itemsHTML = '<p style="font-size:0.8rem;color:var(--gray-400);">No item details.</p>';
+    }
+
+    const subtotal = o.total ? o.total - 49 - 10 : 0;
+
+    document.getElementById('drawer-body').innerHTML = `
+      <div class="detail-section">
+        <h4>Customer</h4>
+        <div class="detail-row"><span class="label">Name</span><span class="val">${o.customer||'—'}</span></div>
+        <div class="detail-row"><span class="label">Phone</span><span class="val">${o.phone||'—'}</span></div>
+        <div class="detail-row"><span class="label">Address</span><span class="val" style="max-width:220px;">${o.address||'—'}</span></div>
+        ${o.notes ? `<div class="detail-row"><span class="label">Notes</span><span class="val" style="max-width:220px;font-style:italic;color:var(--gray-500);">${o.notes}</span></div>` : ''}
+      </div>
+
+      <div class="detail-section">
+        <h4>Items Ordered</h4>
+        ${itemsHTML}
+      </div>
+
+      <div class="detail-section">
+        <h4>Payment</h4>
+        <div class="detail-row"><span class="label">Subtotal</span><span class="val">${fmtPeso(subtotal)}</span></div>
+        <div class="detail-row"><span class="label">Delivery Fee</span><span class="val">₱49</span></div>
+        <div class="detail-row"><span class="label">Service Fee</span><span class="val">₱10</span></div>
+        <div class="detail-row" style="padding-top:0.5rem;border-top:1px dashed var(--brown-100);margin-top:0.25rem;">
+          <span class="label" style="font-weight:700;color:var(--brown-900);">Total</span>
+          <span class="val" style="font-size:1rem;color:var(--brown-700);">${fmtPeso(o.total)}</span>
+        </div>
+        <div class="detail-row" style="margin-top:0.5rem;"><span class="label">Method</span><span class="val">${payBadge(o.payment)}</span></div>
+      </div>
+
+      <div class="detail-section">
+        <h4>Update Status</h4>
+        <select class="status-select" id="drawer-status">
+          <option value="Pending"   ${(o.status||'Pending')==='Pending'   ?'selected':''}>🟡 Pending</option>
+          <option value="Preparing" ${o.status==='Preparing'?'selected':''}>🔵 Preparing</option>
+          <option value="Delivered" ${o.status==='Delivered'?'selected':''}>🟢 Delivered</option>
+          <option value="Cancelled" ${o.status==='Cancelled'?'selected':''}>🔴 Cancelled</option>
+        </select>
+        <button class="update-btn" onclick="updateStatus()">
+          <i class="fa-solid fa-floppy-disk" style="margin-right:0.4rem;"></i>Save Status
+        </button>
+      </div>`;
+
+    document.getElementById('drawer-overlay').classList.add('open');
+  }
+
+  function updateStatus() {
+    if (currentOrderIdx === null) return;
+    const orders = getOrders();
+    const newStatus = document.getElementById('drawer-status').value;
+    orders[currentOrderIdx].status = newStatus;
+    saveOrders(orders);
+    showToast('Status updated to ' + newStatus);
+    // Refresh current page view
+    if (currentPage === 'dashboard') renderDashboard();
+    if (currentPage === 'orders')    renderAllOrders();
+    if (currentPage === 'payments')  renderPayments();
+    document.getElementById('pending-count').textContent = orders.filter(o => o.status === 'Pending' || !o.status).length;
+  }
+
+  function closeDrawer(e) {
+    if (e.target === document.getElementById('drawer-overlay')) closeDrawerDirect();
+  }
+  function closeDrawerDirect() {
+    document.getElementById('drawer-overlay').classList.remove('open');
+    currentOrderIdx = null;
+  }
+
+  // ── Products ─────────────────────────────────────────────────
+  function getProductCatalog() {
+    // Try to read from localStorage (set by app.js) or return empty
+    try {
+      const p = JSON.parse(localStorage.getItem('kk_products'));
+      if (p && p.length) return p;
+    } catch(e) {}
+    return [];
+  }
+
+  function renderProducts() {
+    const products = getProductCatalog();
+    const grid = document.getElementById('products-grid');
+    document.getElementById('product-count-label').textContent = products.length + ' products';
+
+    if (!products.length) {
+      grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><i class="fa-solid fa-box-open"></i><p>No products found. Products are loaded from your app.js catalog.<br>They appear here once a customer visits the store.</p></div>`;
+      return;
+    }
+
+    const catClass = { Hot:'cat-hot', Cold:'cat-cold', Frappe:'cat-frappe', Special:'cat-special' };
+    grid.innerHTML = products.map(p => `
+      <div class="product-item">
+        <img src="${p.image||''}" alt="${p.name}" onerror="this.style.display='none'">
+        <div class="product-item-body">
+          <div class="product-item-name">${p.name}</div>
+          <div class="product-item-price">₱${p.price?.small || p.price || '—'}</div>
+          <span class="product-item-cat ${catClass[p.category]||''}">${p.category||'—'}</span>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── Customers ────────────────────────────────────────────────
+  function renderCustomers() {
+    const users  = getUsers();
+    const orders = getOrders();
+    const search = (document.getElementById('cust-search')?.value || '').toLowerCase();
+
+    // Build customer map from orders too (guest orders)
+    const custMap = {};
+    users.forEach(u => {
+      const key = u.email || u.firstName + u.lastName;
+      custMap[key] = { name: (u.firstName||'') + ' ' + (u.lastName||''), phone: u.phone||'', address: u.address||'', orders:0, spent:0 };
+    });
+    orders.forEach(o => {
+      const key = o.customer || '?';
+      if (!custMap[key]) custMap[key] = { name: o.customer||'?', phone: o.phone||'', address: o.address||'', orders:0, spent:0 };
+      if ((o.status||'Pending') !== 'Cancelled') {
+        custMap[key].orders++;
+        custMap[key].spent += o.total || 0;
+      }
+    });
+
+    let list = Object.values(custMap);
+    if (search) list = list.filter(c => c.name.toLowerCase().includes(search) || c.phone.includes(search));
+
+    const tbody = document.getElementById('customers-body');
+    if (!list.length) {
+      tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state"><i class="fa-solid fa-users"></i><p>No customers yet.</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = list.map(c => `
+      <tr>
+        <td><div style="display:flex;align-items:center;gap:0.6rem;">
+          <div class="customer-avatar">${(c.name||'?')[0].toUpperCase()}</div>
+          <strong style="font-size:0.82rem;">${c.name||'—'}</strong>
+        </div></td>
+        <td style="color:var(--gray-500);font-size:0.8rem;">${c.phone||'—'}</td>
+        <td style="color:var(--gray-500);font-size:0.78rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.address||'—'}</td>
+        <td style="text-align:center;"><strong>${c.orders}</strong></td>
+        <td><strong style="color:var(--brown-700);">${fmtPeso(c.spent)}</strong></td>
+      </tr>`).join('');
+  }
+
+  // ── Payments ────────────────────────────────────────────────
+  function renderPayments() {
+    const orders = getOrders();
+    const valid = orders.filter(o => o.status !== 'Cancelled');
+    const total  = valid.reduce((s,o) => s + (o.total||0), 0);
+    const pod    = valid.filter(o => o.payment !== 'InstaPay');
+    const ip     = valid.filter(o => o.payment === 'InstaPay');
+
+    document.getElementById('pay-total').textContent    = fmtPeso(total);
+    document.getElementById('pay-pod-total').textContent= fmtPeso(pod.reduce((s,o)=>s+(o.total||0),0));
+    document.getElementById('pay-pod-count').textContent= pod.length + ' orders';
+    document.getElementById('pay-ip-total').textContent = fmtPeso(ip.reduce((s,o)=>s+(o.total||0),0));
+    document.getElementById('pay-ip-count').textContent = ip.length + ' orders';
+
+    const tbody = document.getElementById('payments-body');
+    if (!orders.length) {
+      tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fa-solid fa-peso-sign"></i><p>No transactions yet.</p></div></td></tr>`;
+      return;
+    }
+    tbody.innerHTML = orders.map((o,idx) => `
+      <tr>
+        <td><span class="order-no">${o.id||'—'}</span></td>
+        <td style="font-size:0.82rem;font-weight:600;">${o.customer||'—'}</td>
+        <td><strong style="color:${o.status==='Cancelled'?'var(--gray-400)':'var(--brown-700)'};">${fmtPeso(o.total)}</strong></td>
+        <td>${payBadge(o.payment)}</td>
+        <td>${badgeHTML(o.status)}</td>
+        <td style="color:var(--gray-400);font-size:0.78rem;white-space:nowrap;">${o.date||'—'}</td>
+      </tr>`).join('');
+  }
+
+  // ── Logout ───────────────────────────────────────────────────
+  function logout() {
+    localStorage.removeItem(SESSION_KEY);
+    window.location.href = 'login.html';
+  }
+
+  // ── Init ─────────────────────────────────────────────────────
+  renderDashboard();
+  document.getElementById('pending-count').textContent = getOrders().filter(o => o.status === 'Pending' || !o.status).length;
+</script>
 </body>
 </html>
-</script>
